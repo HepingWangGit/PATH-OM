@@ -40,4 +40,4 @@ logs/
 
 # IDEs
 .vscode/
-.idea/
+.idea/run/cache/

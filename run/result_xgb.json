@@ -1,0 +1,7 @@
+{
+  "overall_correlation": 0.6932248645893109,
+  "n_cell_lines_in_test": 63,
+  "total_test_samples": 672,
+  "per_cl_corr_mean": 0.5786651919229648,
+  "per_cl_corr_median": 0.6492953146707028
+}
