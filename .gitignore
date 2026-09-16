@@ -40,4 +40,9 @@ logs/
 
 # IDEs
 .vscode/
-.idea/run/cache/
+.idea/
+
+# Local scratch (this session's cache of large regeneratable intermediates)
+run/cache/
+run/__pycache__/
+run/*.log
