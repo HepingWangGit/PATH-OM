@@ -183,10 +183,21 @@ def train_predictive_models(features, dict_list):
             mut_1_test = np.array(mut_test)[:,:,0]
             mut_2_test = np.array(mut_test)[:,:,1]
 
-            if na_uids.shape[0] > 50:
-                pca_cna = pcas_all[i][0].transform(cna_test)
-                pca_mut1 = pcas_all[i][1].transform(mut_1_test)
-                pca_mut2 = pcas_all[i][2].transform(mut_2_test)
+            # PATCHED: the original condition `na_uids.shape[0] > 50` checked the number of
+            # MISSING samples (the rows we're about to predict), but whether PCA objects
+            # actually exist in pcas_all[i] was decided during training by `len(y) >= 50`
+            # (the number of NON-missing/training samples for this protein) -- a different,
+            # uncorrelated quantity. Whenever a protein had few observed samples but many
+            # missing ones (common for the wider 318-protein set), this mismatch made the
+            # code try pcas_all[i][0] on an empty list, crashing with
+            # "IndexError: list index out of range". Fixed by checking whether PCA was
+            # actually fit for this protein (pcas_all[i] is a non-empty list of 3 fitted
+            # PCA objects) rather than re-deriving the condition from a different count.
+            fitted_pcas = pcas_all.get(i)
+            if isinstance(fitted_pcas, list) and len(fitted_pcas) == 3:
+                pca_cna = fitted_pcas[0].transform(cna_test)
+                pca_mut1 = fitted_pcas[1].transform(mut_1_test)
+                pca_mut2 = fitted_pcas[2].transform(mut_2_test)
             else:
                 pca_cna = cna_test
                 pca_mut1 = mut_1_test
@@ -194,9 +205,18 @@ def train_predictive_models(features, dict_list):
 
             x_for_pred = np.concatenate([baseline_test, drug_test, time_test, dim_test, mrna_test, pca_cna, pca_mut1, pca_mut2, dose_test], axis=1)
 
-            y_pred = models[i].predict(x_for_pred)
-
-            targetscores.loc[na_uids, targetscores.columns[i+8]] = y_pred
+            # PATCHED: models[i] is the sentinel string '#samples < 5' when this protein had
+            # fewer than 5 observed training samples (see the `continue` branch above), which
+            # has no .predict(). Rather than crash the whole sweep on such a protein, leave
+            # its missing values as NaN (they'll be dropped later by the existing
+            # all-NaN-column `remcol` cleanup, or survive as legitimately-unimputable cells
+            # if only some rows are NaN) and note it.
+            if isinstance(models[i], str):
+                print(f"    [imputation] skipping protein {i} ({targetscores.columns[i+8]!r}): "
+                      f"{models[i]}, leaving {na_uids.shape[0]} missing values as NaN")
+            else:
+                y_pred = models[i].predict(x_for_pred)
+                targetscores.loc[na_uids, targetscores.columns[i+8]] = y_pred
         else:
             print(i)
     

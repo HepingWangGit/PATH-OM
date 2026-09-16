@@ -3,8 +3,14 @@ import pandas as pd
 import numpy as np
 from utils import count_consecutive_elements
 
-def load_data():
-        
+def load_data(protein_set='258'):
+    # PATCHED: parameterized to reproduce the paper's two reported protein-set sizes.
+    # protein_set='258' -> elim_threshold = mean/2 (289 columns before fs_mod.csv trim,
+    #   matching the paper's "289-protein" configuration exactly; 258 after trim).
+    # protein_set='318' -> no adaptive-sparsity threshold at all, i.e. every protein
+    #   column with at least one non-missing observation (528 columns before trim,
+    #   matching the paper's "528-protein" configuration exactly; 318 after trim).
+
     all_ts = pd.read_csv('all_ts.csv', sep='\t', index_col=0)
     all_ts = all_ts.fillna('#')
 
@@ -57,8 +63,13 @@ def load_data():
     dose_info = []
 
     targetscores = targetscores[targetscores.columns[(targetscores.isna().all()==0)].to_list()]
-    elim_threshold = ((targetscores.isna()==0).sum().mean()/2) #+ 2000
-    targetscores = targetscores[targetscores.columns[(targetscores.isna()==0).sum()>elim_threshold].to_list()]
+    if protein_set == '258':
+        elim_threshold = ((targetscores.isna()==0).sum().mean()/2) #+ 2000
+        targetscores = targetscores[targetscores.columns[(targetscores.isna()==0).sum()>elim_threshold].to_list()]
+    elif protein_set == '318':
+        pass  # no additional column filter -- keep all non-all-NaN protein columns (528 before fs_mod trim)
+    else:
+        raise ValueError(f"unknown protein_set {protein_set!r}")
 
     # PATCHED: original 'fs_korkut.csv' is missing from the GitHub repo (confirmed absent
     # from both commits in git history). Substituting 'fs_mod.csv' per user instruction.

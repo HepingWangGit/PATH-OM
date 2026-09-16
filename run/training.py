@@ -22,18 +22,35 @@ def training_machine(targetscores, dict_list, features, model_type, model_name):
                 remcol.append(column)
 
     targetscores = targetscores.drop(columns=remcol)
+    # PATCHED: a protein column can end up entirely NaN within just the training split
+    # (e.g. a rare protein with zero observations in this particular fold of rows) even
+    # though it has data in the wider dataset. Dropping it here changes the model's
+    # output width vs. the untouched data_dict['test_targetscores'], which previously
+    # caused a shape mismatch at evaluation time ("size of axis is N but size of
+    # corresponding boolean axis is N+1"). used_protein_columns records exactly which
+    # protein columns survive, so the caller can subset the held-out test set the same
+    # way before evaluating.
+    used_protein_columns = list(targetscores.columns[8:])
 
-    count = 0
-    remcol = []
-    for column in test_targetscores.columns:
-        if test_targetscores[column].isna().sum() > 0:
-            if test_targetscores[column].isna().sum() == test_targetscores.shape[0]:
-                count += 1
-                remcol.append(column)
+    # PATCHED: dict_list['fs_list'] (built once in load_data() from the ORIGINAL,
+    # pre-imputation targetscores) must be re-aligned to whatever protein columns actually
+    # survive by the time we get here -- columns can already have been dropped upstream by
+    # the ml-imputation step's own all-NaN-column cleanup (imputation.py), on top of
+    # whatever this function's own remcol drop removes above. Either way, `targetscores`
+    # at this point (post-remcol-drop) is the authoritative source of truth for which
+    # columns survived and in what order, so we always rebuild fs_list by NAME lookup
+    # against the original data_dict['targetscores'] columns (which is a strict superset
+    # and was never touched by imputation), rather than assuming counts only ever change
+    # inside this function. Only the tsnn path consumes fs_list (via CustomTSModel's
+    # TSEquationLayer), which is why xgb/rf/ensemble/attention never surfaced this.
+    col_to_fs = dict(zip(list(dict_list['targetscores'].columns[8:]), dict_list['fs_list']))
+    fs_list_used = [col_to_fs[c] for c in used_protein_columns]
+    dict_list = dict(dict_list)  # shallow copy; don't mutate the shared/cached data_dict
+    dict_list['fs_list'] = fs_list_used
 
-    test_targetscores = test_targetscores.drop(columns=remcol)
-
-    baselines = ccle_data.iloc[:,1:].to_numpy()
+    baselines = ccle_data.iloc[:,1:].to_numpy().astype(np.float32)  # PATCHED: was dtype=object (from
+    # the empty pd.DataFrame(columns=...) used to build ccle_data), which crashes Keras
+    # with "Invalid dtype: object" for the nn model types (tsnn, attention).
     labels = targetscores.iloc[:,8:].to_numpy()
 
     drug_vecs = np.array([drug2target[drug] for drug in targetscores['Drug-Name']])
@@ -72,6 +89,10 @@ def training_machine(targetscores, dict_list, features, model_type, model_name):
     if model_type == 'nn':
         feature_dict['baseline'] = baselines
 
-    trained_model, pcas = model_shit(data=dict_list, model_type=model_type, model_name=model_name, features=feature_dict, labels=labels)
+    # PATCHED: model_shit() now returns a list of per-fold results (one dict per real
+    # CV fold) instead of a single (model, pcas) pair, since the original 5-fold CV was
+    # broken (see model_stuff.py). Callers that want the old single-model behavior
+    # should use fold_results[-1]['model'], fold_results[-1]['pcas'].
+    fold_results = model_shit(data=dict_list, model_type=model_type, model_name=model_name, features=feature_dict, labels=labels)
 
-    return trained_model, pcas
+    return fold_results, used_protein_columns

@@ -1,0 +1,529 @@
+protein	fs	source	confidence	note
+abcrystallin	0	Claude draft (NOT verified)	Low	alphaB-crystallin/CRYAB; stress chaperone, anti-apoptotic in some cancers, dual
+acc1	1	fs_mod.csv	Verified (from repo file)	
+acc1ps79	0	Claude draft (NOT verified)	Medium	ACC1 (lipogenesis enzyme); pro-tumor metabolism but not classic oncogene
+acvrl1	1	fs_mod.csv	Verified (from repo file)	
+adar1	1	fs_mod.csv	Verified (from repo file)	
+aib1	1	Claude draft (NOT verified)	High	AIB1/NCOA3/SRC-3; amplified steroid receptor coactivator oncogene
+akt	1	fs_mod.csv	Verified (from repo file)	
+akt3	1	Claude draft (NOT verified)	High	AKT family; classic oncogene
+aktps473	1	fs_mod.csv	Verified (from repo file)	
+aktpt308	1	fs_mod.csv	Verified (from repo file)	
+alphacatenin	1	fs_mod.csv	Verified (from repo file)	
+alphatubulin	0	Claude draft (NOT verified)	High	cytoskeletal structural/housekeeping protein
+ampka2ps345	1	fs_mod.csv	Verified (from repo file)	
+ampkalpha	1	fs_mod.csv	Verified (from repo file)	
+ampkapt172	1	fs_mod.csv	Verified (from repo file)	
+annexin1	-1	fs_mod.csv	Verified (from repo file)	
+annexinvii	-1	fs_mod.csv	Verified (from repo file)	
+ar	1	fs_mod.csv	Verified (from repo file)	
+araf	1	fs_mod.csv	Verified (from repo file)	
+arafps299	1	fs_mod.csv	Verified (from repo file)	
+arhi	-1	Claude draft (NOT verified)	High	ARHI/DIRAS3; imprinted tumor suppressor
+arid1a	-1	fs_mod.csv	Verified (from repo file)	
+asns	1	fs_mod.csv	Verified (from repo file)	
+atg12	0	Claude draft (NOT verified)	Medium	autophagy; context-dependent dual role in cancer
+atg3	-1	fs_mod.csv	Verified (from repo file)	
+atg5	0	Claude draft (NOT verified)	Medium	autophagy; context-dependent dual role in cancer
+atg7	-1	fs_mod.csv	Verified (from repo file)	
+atm	1	fs_mod.csv	Verified (from repo file)	
+atmps1981	1	fs_mod.csv	Verified (from repo file)	
+atp5a	0	Claude draft (NOT verified)	High	mitochondrial ATP synthase subunit; housekeeping/metabolic
+atp5h	0	Claude draft (NOT verified)	High	mitochondrial ATP synthase subunit; housekeeping/metabolic
+atpsynthasesubunita	0	Claude draft (NOT verified)	High	mitochondrial; housekeeping/metabolic
+atpsynthasesubunitd	0	Claude draft (NOT verified)	High	mitochondrial; housekeeping/metabolic
+atr	-1	Claude draft (NOT verified)	Medium	DNA damage checkpoint kinase; genome caretaker, though also supports cancer-cell survival under replication stress
+atrip	-1	Claude draft (NOT verified)	Low	ATR-interacting protein; DNA damage response
+atrps428	-1	fs_mod.csv	Verified (from repo file)	
+atrx	-1	Claude draft (NOT verified)	High	chromatin remodeler; well-established tumor suppressor (glioma, pNET)
+auroraapt288	1	Claude draft (NOT verified)	High	Aurora Kinase A; classic mitotic oncogene
+aurorab	1	fs_mod.csv	Verified (from repo file)	
+axl	1	fs_mod.csv	Verified (from repo file)	
+axlpt702	1	Claude draft (NOT verified)	High	AXL receptor tyrosine kinase; oncogene, drives resistance/EMT
+b7h3	1	Claude draft (NOT verified)	Low	CD276 immune checkpoint; promotes immune evasion (oncogenic-associated)
+b7h4	1	fs_mod.csv	Verified (from repo file)	
+bactin	1	fs_mod.csv	Verified (from repo file)	
+badps112	1	fs_mod.csv	Verified (from repo file)	
+bak	-1	fs_mod.csv	Verified (from repo file)	
+bap1	-1	fs_mod.csv	Verified (from repo file)	
+bax	-1	fs_mod.csv	Verified (from repo file)	
+bcateninpt41s45	1	fs_mod.csv	Verified (from repo file)	
+bcl2	1	fs_mod.csv	Verified (from repo file)	
+bcl2a1	1	Claude draft (NOT verified)	High	anti-apoptotic BCL2 family; oncogene
+bcl2ps70	1	Claude draft (NOT verified)	High	BCL2; anti-apoptotic oncogene
+bclxl	1	fs_mod.csv	Verified (from repo file)	
+beclin	0	fs_mod.csv	Verified (from repo file)	
+betacatenin	1	fs_mod.csv	Verified (from repo file)	
+betacateninps33	1	Claude draft (NOT verified)	Medium	beta-catenin; Wnt pathway oncogene (this phospho mark is degradation-tagging/inactivating, but parent is oncogenic)
+betacateninps33s37t41	1	Claude draft (NOT verified)	Medium	beta-catenin; see above
+bid	-1	fs_mod.csv	Verified (from repo file)	
+bim	-1	fs_mod.csv	Verified (from repo file)	
+bip	1	Claude draft (NOT verified)	Medium	GRP78/HSPA5; ER stress chaperone, generally pro-survival/oncogenic in cancer
+bipgrp78	1	fs_mod.csv	Verified (from repo file)	
+bmk1erk5pt218y220	1	Claude draft (NOT verified)	Medium	ERK5/BMK1; MAPK family, generally proliferative/oncogenic
+bmx	1	Claude draft (NOT verified)	Medium	BMX/ETK non-receptor tyrosine kinase; oncogenic survival signaling
+bop1	0	Claude draft (NOT verified)	Low	ribosome biogenesis factor; overexpressed in some cancers but not classic oncogene
+braf	1	fs_mod.csv	Verified (from repo file)	
+brafps445	1	fs_mod.csv	Verified (from repo file)	
+brca1	-1	Claude draft (NOT verified)	High	classic tumor suppressor
+brca2	1	fs_mod.csv	Verified (from repo file)	
+brd4	1	fs_mod.csv	Verified (from repo file)	
+cabl	1	fs_mod.csv	Verified (from repo file)	
+caseinkinase	0	Claude draft (NOT verified)	Low	CK1/CK2 family; dual role, highly context-dependent
+caseinkinase1epsillon	0	Claude draft (NOT verified)	Low	CK1-epsilon; Wnt regulator, dual role
+cask	0	Claude draft (NOT verified)	Low	scaffolding kinase; not classically oncogene/TSG
+caspase3	-1	fs_mod.csv	Verified (from repo file)	
+caspase3active	-1	Claude draft (NOT verified)	High	executioner apoptosis caspase; pro-death, opposes cancer
+caspase7	-1	Claude draft (NOT verified)	High	executioner apoptosis caspase; pro-death
+caspase7cleaved	-1	fs_mod.csv	Verified (from repo file)	
+caspase8	-1	fs_mod.csv	Verified (from repo file)	
+caspase8cleaved	-1	Claude draft (NOT verified)	High	active initiator caspase; pro-apoptotic
+caspase9	-1	Claude draft (NOT verified)	High	initiator caspase; pro-apoptotic
+caspase9cleaved	-1	Claude draft (NOT verified)	High	active initiator caspase; pro-apoptotic
+caveolin1	1	fs_mod.csv	Verified (from repo file)	
+cd11a	0	Claude draft (NOT verified)	Medium	ITGAL; immune adhesion molecule, not a tumor-cell oncogene/TSG
+cd134	1	fs_mod.csv	Verified (from repo file)	
+cd171	1	fs_mod.csv	Verified (from repo file)	
+cd20	1	fs_mod.csv	Verified (from repo file)	
+cd26	0	Claude draft (NOT verified)	Low	DPP4; dual role depending on cancer type
+cd29	1	fs_mod.csv	Verified (from repo file)	
+cd31	1	fs_mod.csv	Verified (from repo file)	
+cd44	1	fs_mod.csv	Verified (from repo file)	
+cd45	1	fs_mod.csv	Verified (from repo file)	
+cd49	0	Claude draft (NOT verified)	Medium	integrin alpha subunit; adhesion, context-dependent
+cd49b	1	fs_mod.csv	Verified (from repo file)	
+cd68	0	Claude draft (NOT verified)	High	macrophage marker; not a tumor-cell oncogene/TSG
+cd86	0	Claude draft (NOT verified)	High	immune costimulatory molecule; not a tumor-cell oncogene/TSG
+cdc25c	1	fs_mod.csv	Verified (from repo file)	
+cdk1	1	fs_mod.csv	Verified (from repo file)	
+cdk1py15	1	Claude draft (NOT verified)	Medium	CDK1; mitotic driver oncogene (this phospho mark is inhibitory, but parent is oncogenic)
+cdk2	1	Claude draft (NOT verified)	High	cell-cycle kinase; oncogene
+cdk4	1	Claude draft (NOT verified)	High	cell-cycle kinase; frequently amplified oncogene, drug target
+chk1	1	fs_mod.csv	Verified (from repo file)	
+chk1ps296	1	fs_mod.csv	Verified (from repo file)	
+chk1ps317	-1	Claude draft (NOT verified)	Medium	Chk1; DNA damage checkpoint/genome caretaker pathway
+chk1ps345	1	fs_mod.csv	Verified (from repo file)	
+chk2	1	fs_mod.csv	Verified (from repo file)	
+chk2pt68	1	fs_mod.csv	Verified (from repo file)	
+ciap	1	fs_mod.csv	Verified (from repo file)	
+ciap2	-1	fs_mod.csv	Verified (from repo file)	
+cjun	1	Claude draft (NOT verified)	High	AP-1 transcription factor; oncogene
+cjunps73	1	fs_mod.csv	Verified (from repo file)	
+ckit	1	fs_mod.csv	Verified (from repo file)	
+claudin7	1	fs_mod.csv	Verified (from repo file)	
+cmet	1	fs_mod.csv	Verified (from repo file)	
+cmetpy1234y1235	1	Claude draft (NOT verified)	High	c-Met activated; receptor tyrosine kinase oncogene
+cmetpy1235	1	fs_mod.csv	Verified (from repo file)	
+cmyc	1	fs_mod.csv	Verified (from repo file)	
+cmycpt58	1	Claude draft (NOT verified)	Medium	c-Myc; major oncogene (this phospho mark is destabilizing, but parent is oncogenic)
+cofilin	0	Claude draft (NOT verified)	Low	actin dynamics regulator; pro-invasion when active, context-dependent
+cofilinps3	0	Claude draft (NOT verified)	Low	phospho-cofilin (inactive form); context-dependent
+cog3	1	fs_mod.csv	Verified (from repo file)	
+collagenvi	1	fs_mod.csv	Verified (from repo file)	
+complexiisubunit	0	Claude draft (NOT verified)	High	mitochondrial complex II subunit; housekeeping/metabolic
+complexiisubunit30	0	Claude draft (NOT verified)	High	mitochondrial complex II subunit; housekeeping/metabolic
+complexiisubunit30kdaip	0	Claude draft (NOT verified)	High	mitochondrial complex II subunit; housekeeping/metabolic
+complexiisubunit70kdafp	0	Claude draft (NOT verified)	High	mitochondrial complex II subunit; housekeeping/metabolic
+complexiisubunitcore2	0	Claude draft (NOT verified)	High	mitochondrial complex III subunit; housekeeping/metabolic
+complexiisubunitndufb4	0	Claude draft (NOT verified)	High	mitochondrial complex I subunit; housekeeping/metabolic
+complexiisubunitrieske	0	Claude draft (NOT verified)	High	mitochondrial complex III Rieske subunit; housekeeping/metabolic
+complexivsubunit1	0	Claude draft (NOT verified)	High	mitochondrial complex IV subunit; housekeeping/metabolic
+complexivsubunitiv	0	Claude draft (NOT verified)	High	mitochondrial complex IV subunit; housekeeping/metabolic
+connexin43	1	fs_mod.csv	Verified (from repo file)	
+couptfii	0	Claude draft (NOT verified)	Low	NR2F2 nuclear receptor; context-dependent role in angiogenesis/metastasis
+cox2	1	fs_mod.csv	Verified (from repo file)	
+coxiv	1	fs_mod.csv	Verified (from repo file)	
+craf	1	fs_mod.csv	Verified (from repo file)	
+crafps338	1	fs_mod.csv	Verified (from repo file)	
+creb	1	fs_mod.csv	Verified (from repo file)	
+crm1	1	Claude draft (NOT verified)	Medium	XPO1 nuclear export; overexpressed oncogenic driver, drug target (selinexor)
+cxcr4	1	Claude draft (NOT verified)	Medium	chemokine receptor; promotes metastasis, oncogenic-associated
+cyclina2	1	Claude draft (NOT verified)	High	cell-cycle cyclin; oncogene
+cyclinb1	1	fs_mod.csv	Verified (from repo file)	
+cyclind1	1	fs_mod.csv	Verified (from repo file)	
+cyclind3	1	fs_mod.csv	Verified (from repo file)	
+cycline	1	Claude draft (NOT verified)	High	Cyclin E; frequently amplified oncogene
+cycline1	1	fs_mod.csv	Verified (from repo file)	
+cycline2	1	fs_mod.csv	Verified (from repo file)	
+cyclophilind	0	Claude draft (NOT verified)	Low	PPIF; mitochondrial permeability transition pore regulator, pro-death, context-dependent
+cyclophilinf	1	fs_mod.csv	Verified (from repo file)	
+cytokeratin19	0	Claude draft (NOT verified)	High	epithelial structural marker; not oncogene/TSG
+datubulin	-1	fs_mod.csv	Verified (from repo file)	
+ddb1	0	Claude draft (NOT verified)	Low	DNA repair/ubiquitin ligase component; context-dependent
+dj1	1	fs_mod.csv	Verified (from repo file)	
+dmhistoneh3	1	fs_mod.csv	Verified (from repo file)	
+dmk9histoneh3	1	fs_mod.csv	Verified (from repo file)	
+dnapkcsps2056	0	Claude draft (NOT verified)	Medium	DNA-PKcs; NHEJ DNA repair, dual (genome caretaker vs. therapy-resistance factor)
+dnapkcspt2609	0	Claude draft (NOT verified)	Medium	DNA-PKcs; see above
+dnapkcspy393	0	Claude draft (NOT verified)	Medium	DNA-PKcs; see above
+dnatopo1	0	Claude draft (NOT verified)	Medium	Topoisomerase I; replication enzyme/drug target, not classic oncogene/TSG
+dusp4	-1	fs_mod.csv	Verified (from repo file)	
+dvl3	1	fs_mod.csv	Verified (from repo file)	
+e2f1	-1	fs_mod.csv	Verified (from repo file)	
+e2f2	1	Claude draft (NOT verified)	High	E2F transcription factor family; drives cell-cycle, oncogenic
+ecadherin	-1	fs_mod.csv	Verified (from repo file)	
+eef2	1	fs_mod.csv	Verified (from repo file)	
+eef2k	1	fs_mod.csv	Verified (from repo file)	
+efabp	0	Claude draft (NOT verified)	Low	FABP4/E-FABP; lipid-binding protein, context-dependent
+egfr	1	fs_mod.csv	Verified (from repo file)	
+egfrpy1173	1	fs_mod.csv	Verified (from repo file)	
+egfrpy992	1	Claude draft (NOT verified)	High	EGFR activated; classic receptor tyrosine kinase oncogene
+eif2aps51	0	Claude draft (NOT verified)	Medium	eIF2alpha inhibitory phospho; integrated stress response, dual
+eif4a1	1	Claude draft (NOT verified)	Medium	translation initiation helicase; supports oncogenic translation programs
+eif4e	1	fs_mod.csv	Verified (from repo file)	
+eif4eps209	1	fs_mod.csv	Verified (from repo file)	
+eif4g	1	fs_mod.csv	Verified (from repo file)	
+elf2aps51	0	Claude draft (NOT verified)	Medium	eIF2alpha inhibitory phospho (alt. naming); see eif2aps51
+elk1ps383	1	fs_mod.csv	Verified (from repo file)	
+ema	1	fs_mod.csv	Verified (from repo file)	
+endothelin1	0	Claude draft (NOT verified)	Low	vasoactive peptide; proliferation/angiogenesis-associated, context-dependent
+eny2	1	fs_mod.csv	Verified (from repo file)	
+epha2	1	Claude draft (NOT verified)	Medium	receptor tyrosine kinase; generally oncogenic, promotes invasion
+epha2ps897	1	Claude draft (NOT verified)	Medium	EphA2 non-canonical activating phospho; oncogenic
+eralpha	1	fs_mod.csv	Verified (from repo file)	
+eralphaps118	1	fs_mod.csv	Verified (from repo file)	
+eralphaps167	1	Claude draft (NOT verified)	High	ER-alpha activated; drives ER+ breast cancer
+ercc1	1	fs_mod.csv	Verified (from repo file)	
+ercc2	-1	Claude draft (NOT verified)	Medium	XPD; nucleotide excision repair, genome caretaker
+ercc5	-1	fs_mod.csv	Verified (from repo file)	
+erg123	1	Claude draft (NOT verified)	High	ERG; ETS transcription factor, fusion oncogene (prostate cancer)
+erk2	1	fs_mod.csv	Verified (from repo file)	
+erk5	1	Claude draft (NOT verified)	Medium	ERK5/MAPK7; generally proliferative/oncogenic MAPK family member
+ets1	1	fs_mod.csv	Verified (from repo file)	
+etv6	-1	Claude draft (NOT verified)	Medium	ETV6; ETS family, generally tumor suppressor in leukemias (fusion partner)
+fak	1	fs_mod.csv	Verified (from repo file)	
+fakpy397	1	fs_mod.csv	Verified (from repo file)	
+fakpy925	1	Claude draft (NOT verified)	High	FAK activated; promotes invasion/survival, oncogenic
+fancd2	-1	Claude draft (NOT verified)	High	Fanconi Anemia pathway; DNA repair tumor suppressor
+fasn	1	fs_mod.csv	Verified (from repo file)	
+fgfrpy653y654	1	Claude draft (NOT verified)	High	FGFR activated; receptor tyrosine kinase oncogene
+fibronectin	1	fs_mod.csv	Verified (from repo file)	
+fortilin	1	Claude draft (NOT verified)	Medium	TCTP; anti-apoptotic, overexpressed and pro-survival in many cancers
+foxm1	1	fs_mod.csv	Verified (from repo file)	
+foxo3a	-1	fs_mod.csv	Verified (from repo file)	
+foxo3aps318	-1	Claude draft (NOT verified)	Medium	FOXO3A; tumor suppressor transcription factor (this phospho mark is inactivating, but parent is tumor-suppressive)
+foxo3aps318s321	-1	fs_mod.csv	Verified (from repo file)	
+fra1	1	fs_mod.csv	Verified (from repo file)	
+fra1ps265	1	Claude draft (NOT verified)	Medium	FRA1/FOSL1; AP-1 family, promotes invasion/EMT, oncogenic
+fra1ps265cleaved	1	Claude draft (NOT verified)	Medium	FRA1/FOSL1; see above
+frs2apy436	1	Claude draft (NOT verified)	Medium	FRS2 adaptor; downstream of oncogenic RTK signaling
+g6pd	1	fs_mod.csv	Verified (from repo file)	
+gab2	1	fs_mod.csv	Verified (from repo file)	
+gab2py452	1	Claude draft (NOT verified)	Medium	GAB2 adaptor; amplified oncogenic scaffold in breast cancer
+gapdh	0	fs_mod.csv	Verified (from repo file)	
+gata3	-1	fs_mod.csv	Verified (from repo file)	
+gata3beta	-1	Claude draft (NOT verified)	Medium	GATA3; luminal differentiation marker, generally tumor suppressive in breast cancer
+gata6	1	fs_mod.csv	Verified (from repo file)	
+gclm	1	fs_mod.csv	Verified (from repo file)	
+gcn5l2	1	fs_mod.csv	Verified (from repo file)	
+glutamated12	1	fs_mod.csv	Verified (from repo file)	
+glutaminase	1	fs_mod.csv	Verified (from repo file)	
+gpbb	0	Claude draft (NOT verified)	High	glycogen phosphorylase (brain type); metabolic enzyme
+granzymeb	-1	fs_mod.csv	Verified (from repo file)	
+gsk3alphabeta	0	Claude draft (NOT verified)	Medium	GSK3; complex dual role (Wnt tumor suppressor arm vs. other pro-tumor roles)
+gsk3alphabetaps21	0	Claude draft (NOT verified)	Medium	GSK3; see above
+gsk3alphabetaps21s9	0	Claude draft (NOT verified)	Medium	GSK3; see above
+gsk3b	0	Claude draft (NOT verified)	Medium	GSK3-beta; dual role
+gsk3bps9	0	Claude draft (NOT verified)	Medium	GSK3-beta; dual role
+gsk3ps21	0	Claude draft (NOT verified)	Medium	GSK3; dual role
+gsk3ps9	1	fs_mod.csv	Verified (from repo file)	
+gys	1	fs_mod.csv	Verified (from repo file)	
+gysps641	-1	fs_mod.csv	Verified (from repo file)	
+h2axps139	0	Claude draft (NOT verified)	Medium	gamma-H2AX; DNA damage marker/readout, not itself an oncogene/TSG
+h2axps140	1	fs_mod.csv	Verified (from repo file)	
+her2	1	fs_mod.csv	Verified (from repo file)	
+her2py1248	1	fs_mod.csv	Verified (from repo file)	
+her3	1	fs_mod.csv	Verified (from repo file)	
+her3py1289	1	fs_mod.csv	Verified (from repo file)	
+heregulin	1	fs_mod.csv	Verified (from repo file)	
+hes1	-1	fs_mod.csv	Verified (from repo file)	
+hexokinaseii	1	fs_mod.csv	Verified (from repo file)	
+hiap	1	Claude draft (NOT verified)	Medium	IAP family (e.g. survivin/BIRC); anti-apoptotic, oncogenic
+hif1alpha	1	fs_mod.csv	Verified (from repo file)	
+histoneh2a	0	Claude draft (NOT verified)	High	core histone; housekeeping
+histoneh3	1	fs_mod.csv	Verified (from repo file)	
+hlae	0	Claude draft (NOT verified)	Low	HLA-E; NK cell ligand, immune evasion marker
+hmgb1	0	Claude draft (NOT verified)	Low	chromatin/DAMP protein; dual role (inflammation, autophagy)
+hsp27	1	fs_mod.csv	Verified (from repo file)	
+hsp27ps82	1	fs_mod.csv	Verified (from repo file)	
+hsp70	1	fs_mod.csv	Verified (from repo file)	
+hsp90	1	Claude draft (NOT verified)	Medium	chaperone; stabilizes oncoproteins, drug target, oncogenic-associated
+hsp90a	1	Claude draft (NOT verified)	Medium	HSP90-alpha; see hsp90
+hsparc	0	Claude draft (NOT verified)	Low	SPARC/osteonectin (alt. naming); matricellular protein, dual role
+hvegf	1	Claude draft (NOT verified)	High	VEGF; classic angiogenesis oncogenic factor
+hydin	0	Claude draft (NOT verified)	Low	ciliary protein; not an established oncogene/TSG
+igf1r	1	Claude draft (NOT verified)	High	IGF1 receptor; growth factor receptor oncogene
+igf1rb	1	Claude draft (NOT verified)	High	IGF1R beta subunit; see igf1r
+igf1rpy1135	1	Claude draft (NOT verified)	High	IGF1R activated; see igf1r
+igf1rpy1135y1136	1	fs_mod.csv	Verified (from repo file)	
+igf1rpy980	1	Claude draft (NOT verified)	High	IGF1R activated; see igf1r
+igfbp2	1	fs_mod.csv	Verified (from repo file)	
+igfbp5	0	Claude draft (NOT verified)	Low	IGF binding protein; growth-inhibitory or -promoting depending on context
+igfbpb	0	Claude draft (NOT verified)	Low	IGFBP family (unclear which); context-dependent
+ikbaps32	0	Claude draft (NOT verified)	Low	IkB-alpha inhibitory phospho; leads to NF-kB activation (oncogenic pathway) but parent IkB is itself an NF-kB inhibitor - ambiguous
+ikbaps3236	0	Claude draft (NOT verified)	Low	IkB-alpha; see ikbaps32
+inpp4b	-1	fs_mod.csv	Verified (from repo file)	
+irb	1	fs_mod.csv	Verified (from repo file)	
+irf1	1	fs_mod.csv	Verified (from repo file)	
+irs1	1	fs_mod.csv	Verified (from repo file)	
+irs1ps307	0	Claude draft (NOT verified)	Low	IRS1; oncogenic adaptor in general, but this specific phospho mark is inhibitory (insulin resistance mark)
+jab1	1	Claude draft (NOT verified)	Medium	COPS5/JAB1; promotes degradation of p27 (tumor suppressor), oncogenic
+jagged1	1	fs_mod.csv	Verified (from repo file)	
+jak2	1	fs_mod.csv	Verified (from repo file)	
+jnk2	1	fs_mod.csv	Verified (from repo file)	
+jnkpt183y185	1	fs_mod.csv	Verified (from repo file)	
+junb	0	Claude draft (NOT verified)	Low	AP-1 family; context-dependent (tumor suppressor in some myeloid contexts, oncogene in others)
+kif11	0	Claude draft (NOT verified)	Low	Eg5 mitotic kinesin; proliferation-associated but not classic oncogene
+kras	1	Claude draft (NOT verified)	High	classic oncogene
+ku	0	Claude draft (NOT verified)	Medium	Ku70/Ku80 NHEJ complex; DNA repair, dual (caretaker vs. resistance factor)
+ku80	1	fs_mod.csv	Verified (from repo file)	
+lc3ab	1	fs_mod.csv	Verified (from repo file)	
+lck	1	fs_mod.csv	Verified (from repo file)	
+ldha	1	fs_mod.csv	Verified (from repo file)	
+lkb1	-1	Claude draft (NOT verified)	High	STK11; classic tumor suppressor
+lrp6ps1490	1	fs_mod.csv	Verified (from repo file)	
+mapkpt202	1	Claude draft (NOT verified)	High	MAPK/ERK activated; classic oncogenic pathway
+mapkpt202y204	1	fs_mod.csv	Verified (from repo file)	
+mcl1	1	fs_mod.csv	Verified (from repo file)	
+mct4	1	fs_mod.csv	Verified (from repo file)	
+mdm2	1	Claude draft (NOT verified)	High	classic oncogene (negative regulator of p53)
+mdm2ps166	1	fs_mod.csv	Verified (from repo file)	
+mek1	1	fs_mod.csv	Verified (from repo file)	
+mek12ps217	1	Claude draft (NOT verified)	High	MEK1/2 activated; RAS-RAF-MEK-ERK oncogenic pathway
+mek1ps217	1	Claude draft (NOT verified)	High	MEK1 activated; see mek12ps217
+mek1ps217s221	1	fs_mod.csv	Verified (from repo file)	
+mek2	1	Claude draft (NOT verified)	High	MEK2; oncogenic pathway kinase
+merit40ps29	1	fs_mod.csv	Verified (from repo file)	
+merlin	-1	fs_mod.csv	Verified (from repo file)	
+met	1	Claude draft (NOT verified)	High	MET receptor tyrosine kinase; oncogene
+mgmt	0	Claude draft (NOT verified)	Medium	DNA repair enzyme; associated with therapy resistance (dual role)
+mif	1	fs_mod.csv	Verified (from repo file)	
+mig6	-1	fs_mod.csv	Verified (from repo file)	
+mitochondria	0	Claude draft (NOT verified)	High	generic mitochondrial marker (e.g. porin/VDAC); housekeeping
+mklp	0	Claude draft (NOT verified)	Low	mitotic kinesin-like protein; proliferation-associated, not classic oncogene
+mlh1	-1	Claude draft (NOT verified)	High	DNA mismatch repair; classic tumor suppressor
+mmp2	1	fs_mod.csv	Verified (from repo file)	
+mnk1	1	fs_mod.csv	Verified (from repo file)	
+mre11	1	fs_mod.csv	Verified (from repo file)	
+msh2	1	fs_mod.csv	Verified (from repo file)	
+msh6	-1	fs_mod.csv	Verified (from repo file)	
+msi2	1	fs_mod.csv	Verified (from repo file)	
+mtor	1	fs_mod.csv	Verified (from repo file)	
+mtorps2448	1	fs_mod.csv	Verified (from repo file)	
+myosin11	0	Claude draft (NOT verified)	High	cytoskeletal motor protein; structural
+myosiniia	0	Claude draft (NOT verified)	High	cytoskeletal motor protein; structural
+myosiniiaps1943	-1	fs_mod.csv	Verified (from repo file)	
+myt1	1	fs_mod.csv	Verified (from repo file)	
+napsina	1	fs_mod.csv	Verified (from repo file)	
+nbs1	-1	Claude draft (NOT verified)	High	NBN; MRN complex DNA damage response, tumor suppressor-like
+ncadherin	1	fs_mod.csv	Verified (from repo file)	
+nckips1	0	Claude draft (NOT verified)	Low	NCK adaptor phospho; signaling adaptor, context-dependent
+ndrg1pt346	-1	fs_mod.csv	Verified (from repo file)	
+ndufb4	1	fs_mod.csv	Verified (from repo file)	
+nf2	1	fs_mod.csv	Verified (from repo file)	
+nfkbp65	1	Claude draft (NOT verified)	Medium	RelA/NF-kB subunit; generally pro-survival/oncogenic in cancer
+nfkbp65ps536	1	fs_mod.csv	Verified (from repo file)	
+notch1	1	fs_mod.csv	Verified (from repo file)	
+notch3	1	fs_mod.csv	Verified (from repo file)	
+nras	1	fs_mod.csv	Verified (from repo file)	
+p14arf	-1	Claude draft (NOT verified)	High	CDKN2A/ARF; classic tumor suppressor (activates p53)
+p16ink4a	-1	fs_mod.csv	Verified (from repo file)	
+p18ink4c	-1	Claude draft (NOT verified)	High	CDKN2C; CDK inhibitor, tumor suppressor
+p19	-1	Claude draft (NOT verified)	Medium	CDKN2D/p19INK4d (or ARF ortholog); CDK inhibitor family, tumor suppressor
+p21	-1	fs_mod.csv	Verified (from repo file)	
+p27	1	fs_mod.csv	Verified (from repo file)	
+p27pt157	1	fs_mod.csv	Verified (from repo file)	
+p27pt183	-1	Claude draft (NOT verified)	Medium	p27/KIP1; CDK inhibitor tumor suppressor (this phospho mark alters localization)
+p27pt198	1	fs_mod.csv	Verified (from repo file)	
+p38	0	Claude draft (NOT verified)	Medium	p38 MAPK; stress-activated kinase, dual role (context-dependent tumor suppressor/promoter)
+p38a	0	Claude draft (NOT verified)	Medium	p38-alpha; see p38
+p38mapk	1	fs_mod.csv	Verified (from repo file)	
+p38mapkpt180	0	Claude draft (NOT verified)	Medium	p38 MAPK activated; see p38
+p38mapkpt180y182	0	Claude draft (NOT verified)	Medium	p38 MAPK activated; see p38
+p4442mapk	1	fs_mod.csv	Verified (from repo file)	
+p53	-1	fs_mod.csv	Verified (from repo file)	
+p53ps15	-1	Claude draft (NOT verified)	High	p53 activated (stabilizing mark); classic tumor suppressor
+p62	0	Claude draft (NOT verified)	Medium	SQSTM1; autophagy adaptor, dual role (NRF2 activation vs. quality control)
+p62lckligand	1	fs_mod.csv	Verified (from repo file)	
+p70s6k	1	fs_mod.csv	Verified (from repo file)	
+p70s6kps371	1	Claude draft (NOT verified)	High	p70S6K activated; mTOR pathway, oncogenic (drives translation/growth)
+p70s6kpt389	1	fs_mod.csv	Verified (from repo file)	
+p90rsk	1	fs_mod.csv	Verified (from repo file)	
+p90rskpt359	1	Claude draft (NOT verified)	Medium	RSK activated; downstream of ERK, pro-survival/oncogenic
+p90rskpt359s363	1	fs_mod.csv	Verified (from repo file)	
+p90rskpt573	1	fs_mod.csv	Verified (from repo file)	
+pai1	1	fs_mod.csv	Verified (from repo file)	
+paics	1	fs_mod.csv	Verified (from repo file)	
+pak1	1	fs_mod.csv	Verified (from repo file)	
+pak4	1	fs_mod.csv	Verified (from repo file)	
+pal1	0	Claude draft (NOT verified)	Low	PAI-1/SERPINE1; context-dependent, often associated with invasion/poor prognosis
+par	1	fs_mod.csv	Verified (from repo file)	
+parp1	0	Claude draft (NOT verified)	Medium	PARP1; DNA repair enzyme, dual (caretaker vs. drug-resistance factor, PARP-inhibitor target)
+parp2	0	Claude draft (NOT verified)	Medium	PARP2; see parp1
+parpcleaved	1	fs_mod.csv	Verified (from repo file)	
+pax2	0	Claude draft (NOT verified)	Low	transcription factor; oncogenic in some cancers (renal, endometrial), context-dependent
+pax8	0	Claude draft (NOT verified)	Low	transcription factor; lineage-survival oncogene in some cancers (thyroid, ovarian, renal)
+paxillin	1	fs_mod.csv	Verified (from repo file)	
+paxillinpy118	0	Claude draft (NOT verified)	Low	Paxillin activated; focal adhesion, pro-migratory, context-dependent
+pcadherin	1	fs_mod.csv	Verified (from repo file)	
+pcna	1	fs_mod.csv	Verified (from repo file)	
+pdcd4	-1	fs_mod.csv	Verified (from repo file)	
+pdgfrb	1	fs_mod.csv	Verified (from repo file)	
+pdh	0	Claude draft (NOT verified)	High	pyruvate dehydrogenase; metabolic enzyme
+pdha1	0	Claude draft (NOT verified)	High	pyruvate dehydrogenase subunit; metabolic enzyme
+pdhk1	1	fs_mod.csv	Verified (from repo file)	
+pdk1	1	fs_mod.csv	Verified (from repo file)	
+pdk1ps241	1	fs_mod.csv	Verified (from repo file)	
+pdl1	1	fs_mod.csv	Verified (from repo file)	
+pea15	-1	fs_mod.csv	Verified (from repo file)	
+pea15ps116	1	fs_mod.csv	Verified (from repo file)	
+pi3kp110alpha	1	fs_mod.csv	Verified (from repo file)	
+pi3kp110b	1	fs_mod.csv	Verified (from repo file)	
+pi3kp85	1	fs_mod.csv	Verified (from repo file)	
+pkaa	1	fs_mod.csv	Verified (from repo file)	
+pkcalpha	1	fs_mod.csv	Verified (from repo file)	
+pkcalphaps657	1	fs_mod.csv	Verified (from repo file)	
+pkcbetaiips660	1	Claude draft (NOT verified)	Low	PKC-beta II activated; PKC family generally pro-proliferative
+pkcdeltaps664	1	fs_mod.csv	Verified (from repo file)	
+pkm2	1	fs_mod.csv	Verified (from repo file)	
+plcgamma2py759	1	fs_mod.csv	Verified (from repo file)	
+plcr2py759	0	Claude draft (NOT verified)	Low	PLC-gamma2 activated; downstream of RTK signaling, context-dependent
+plk1	1	fs_mod.csv	Verified (from repo file)	
+plk4	0	Claude draft (NOT verified)	Low	Polo-like kinase 4; centriole duplication, amplification linked to cancer but not classic oncogene
+pms2	-1	fs_mod.csv	Verified (from repo file)	
+porin	-1	fs_mod.csv	Verified (from repo file)	
+pr	1	fs_mod.csv	Verified (from repo file)	
+pras40	1	fs_mod.csv	Verified (from repo file)	
+pras40pt246	1	fs_mod.csv	Verified (from repo file)	
+prdx1	1	fs_mod.csv	Verified (from repo file)	
+prex1	1	fs_mod.csv	Verified (from repo file)	
+prkag2	-1	Claude draft (NOT verified)	Low	AMPK gamma2 subunit; AMPK pathway generally growth-inhibitory/tumor-suppressive
+prmt5	1	Claude draft (NOT verified)	Medium	protein arginine methyltransferase; overexpressed epigenetic oncogenic driver
+prohibitin	0	Claude draft (NOT verified)	Low	mitochondrial/membrane scaffold; context-dependent (tumor suppressive or oncogenic)
+ptch	-1	Claude draft (NOT verified)	High	PTCH1; Hedgehog pathway, classic tumor suppressor
+pten	-1	fs_mod.csv	Verified (from repo file)	
+puma	-1	Claude draft (NOT verified)	High	BBC3; pro-apoptotic BH3-only protein, tumor-suppressive
+pygm	0	Claude draft (NOT verified)	High	glycogen phosphorylase (muscle type); metabolic enzyme
+rab11	1	fs_mod.csv	Verified (from repo file)	
+rab25	1	fs_mod.csv	Verified (from repo file)	
+rad50	-1	fs_mod.csv	Verified (from repo file)	
+rad51	-1	fs_mod.csv	Verified (from repo file)	
+raptor	1	fs_mod.csv	Verified (from repo file)	
+rasd2	0	Claude draft (NOT verified)	Low	Rhes; Ras-related GTPase, context-dependent
+rb	-1	fs_mod.csv	Verified (from repo file)	
+rbm15	-1	fs_mod.csv	Verified (from repo file)	
+rbps807	-1	Claude draft (NOT verified)	Medium	Rb; classic tumor suppressor (this phospho mark is inactivating)
+rbps807s811	1	fs_mod.csv	Verified (from repo file)	
+rheb	1	fs_mod.csv	Verified (from repo file)	
+rictor	1	fs_mod.csv	Verified (from repo file)	
+rictorpt1135	-1	fs_mod.csv	Verified (from repo file)	
+rip	1	fs_mod.csv	Verified (from repo file)	
+rock1	0	Claude draft (NOT verified)	Low	Rho kinase; promotes invasion/migration, context-dependent
+rpa32	1	fs_mod.csv	Verified (from repo file)	
+rpa32ps33	0	Claude draft (NOT verified)	Medium	RPA32; replication/DNA damage factor, not classically oncogene/TSG on its own
+rpa32ps4s8	-1	fs_mod.csv	Verified (from repo file)	
+rsk	1	fs_mod.csv	Verified (from repo file)	
+s6	1	fs_mod.csv	Verified (from repo file)	
+s6ps235	1	Claude draft (NOT verified)	Medium	ribosomal S6 activated; mTOR pathway growth/translation marker
+s6ps235s236	1	fs_mod.csv	Verified (from repo file)	
+s6ps240	1	Claude draft (NOT verified)	Medium	ribosomal S6 activated; see s6ps235
+s6ps240s244	1	fs_mod.csv	Verified (from repo file)	
+scd1	1	fs_mod.csv	Verified (from repo file)	
+sdha	-1	fs_mod.csv	Verified (from repo file)	
+setd2	1	fs_mod.csv	Verified (from repo file)	
+sf2	1	fs_mod.csv	Verified (from repo file)	
+shcpy317	1	fs_mod.csv	Verified (from repo file)	
+shp2py542	1	fs_mod.csv	Verified (from repo file)	
+slc1a5	1	fs_mod.csv	Verified (from repo file)	
+slfn11	-1	fs_mod.csv	Verified (from repo file)	
+smac	-1	fs_mod.csv	Verified (from repo file)	
+smad1	0	fs_mod.csv	Verified (from repo file)	
+smad3	0	fs_mod.csv	Verified (from repo file)	
+smad3ps423	0	Claude draft (NOT verified)	Medium	SMAD3 activated; TGF-beta pathway, dual role (tumor suppressive early, pro-metastatic late)
+smad4	0	fs_mod.csv	Verified (from repo file)	
+smad6	0	Claude draft (NOT verified)	Low	inhibitory SMAD; TGF-beta pathway regulator, context-dependent
+snail	1	fs_mod.csv	Verified (from repo file)	
+socs2	-1	Claude draft (NOT verified)	Low	suppressor of cytokine signaling; generally negative-feedback/tumor-suppressive
+sod1	1	fs_mod.csv	Verified (from repo file)	
+sod2	1	fs_mod.csv	Verified (from repo file)	
+sox2	1	fs_mod.csv	Verified (from repo file)	
+sparc	0	Claude draft (NOT verified)	Low	matricellular glycoprotein; dual role (context-dependent)
+spib	0	Claude draft (NOT verified)	Low	ETS transcription factor (immune lineage); not an established tumor-cell oncogene/TSG
+src	1	fs_mod.csv	Verified (from repo file)	
+srcpy416	1	fs_mod.csv	Verified (from repo file)	
+srcpy527	-1	fs_mod.csv	Verified (from repo file)	
+stat3	1	fs_mod.csv	Verified (from repo file)	
+stat3py705	1	fs_mod.csv	Verified (from repo file)	
+stat3py727	1	Claude draft (NOT verified)	High	STAT3 activated; classic oncogenic transcription factor
+stat5alpha	1	fs_mod.csv	Verified (from repo file)	
+stat5py694	1	Claude draft (NOT verified)	High	STAT5 activated; oncogenic, especially in leukemias
+stat6py641	0	Claude draft (NOT verified)	Low	STAT6 activated; Th2/immune signaling, context-dependent in cancer
+stathmin	1	fs_mod.csv	Verified (from repo file)	
+statpy694	0	Claude draft (NOT verified)	Low	generic STAT phospho (unclear which STAT); context-dependent
+syk	1	fs_mod.csv	Verified (from repo file)	
+syntaxab2	0	Claude draft (NOT verified)	High	syntaxin; vesicle trafficking, not oncogene/TSG
+tau	1	fs_mod.csv	Verified (from repo file)	
+taz	-1	fs_mod.csv	Verified (from repo file)	
+tazps89	1	Claude draft (NOT verified)	Medium	TAZ/WWTR1; Hippo pathway effector, oncogenic (this phospho mark is inactivating)
+tcf4	1	Claude draft (NOT verified)	Low	TCF7L2; Wnt pathway transcription factor, oncogenic in Wnt-driven cancers (colorectal)
+telomerase	1	Claude draft (NOT verified)	High	TERT; classic oncogene (reactivated in most cancers)
+tfam	1	fs_mod.csv	Verified (from repo file)	
+tff1	0	Claude draft (NOT verified)	Low	trefoil factor; estrogen-regulated, context-dependent
+tfrc	1	fs_mod.csv	Verified (from repo file)	
+tgif2	0	Claude draft (NOT verified)	Low	transcriptional repressor; context-dependent, some oncogenic reports (ovarian)
+tif1	0	Claude draft (NOT verified)	Low	TRIM24/TIF1-alpha; oncogenic in some cancers (regulates p53 degradation)
+tigar	0	fs_mod.csv	Verified (from repo file)	
+tim3	0	Claude draft (NOT verified)	Low	HAVCR2 immune checkpoint; promotes immune evasion (oncogenic-associated)
+top1	0	Claude draft (NOT verified)	Medium	Topoisomerase I; replication enzyme/drug target, not classic oncogene/TSG
+transglutaminase	1	fs_mod.csv	Verified (from repo file)	
+trfc	0	Claude draft (NOT verified)	Low	transferrin receptor/TFRC; proliferation-associated, iron metabolism
+trim25	1	fs_mod.csv	Verified (from repo file)	
+tsc1	-1	fs_mod.csv	Verified (from repo file)	
+tsc2	-1	Claude draft (NOT verified)	High	TSC2; classic tumor suppressor (mTOR pathway negative regulator)
+tsc2pt1462	-1	Claude draft (NOT verified)	Medium	TSC2; tumor suppressor (this phospho mark is inactivating)
+ttf1	-1	fs_mod.csv	Verified (from repo file)	
+tu30	0	Claude draft (NOT verified)	Low	unclear/unidentified antibody target
+tufm	1	fs_mod.csv	Verified (from repo file)	
+twist	1	fs_mod.csv	Verified (from repo file)	
+tyro3	1	fs_mod.csv	Verified (from repo file)	
+ubac1	0	fs_mod.csv	Verified (from repo file)	
+ubiquitinclonep4d1a11	0	Claude draft (NOT verified)	Low	generic ubiquitin antibody clone; not a specific oncogene/TSG
+ugt1a	1	fs_mod.csv	Verified (from repo file)	
+ulk1ps757	1	fs_mod.csv	Verified (from repo file)	
+uqcrc2	0	Claude draft (NOT verified)	High	mitochondrial complex III subunit; housekeeping/metabolic
+vasp	1	fs_mod.csv	Verified (from repo file)	
+vav1	1	fs_mod.csv	Verified (from repo file)	
+vegf	1	Claude draft (NOT verified)	High	classic angiogenesis oncogenic factor
+vegfr2	1	fs_mod.csv	Verified (from repo file)	
+vhleppk1	0	fs_mod.csv	Verified (from repo file)	
+vimentin	1	fs_mod.csv	Verified (from repo file)	
+wee1	1	fs_mod.csv	Verified (from repo file)	
+wee1ps642	-1	fs_mod.csv	Verified (from repo file)	
+wipi1	-1	fs_mod.csv	Verified (from repo file)	
+wipi2	-1	fs_mod.csv	Verified (from repo file)	
+x1433beta	-1	fs_mod.csv	Verified (from repo file)	
+x1433epsilon	1	fs_mod.csv	Verified (from repo file)	
+x1433sigma	-1	Claude draft (NOT verified)	Medium	14-3-3 sigma/SFN; generally tumor suppressor (silenced in many cancers)
+x1433zeta	-1	fs_mod.csv	Verified (from repo file)	
+x4ebp1	-1	fs_mod.csv	Verified (from repo file)	
+x4ebp1ps65	1	fs_mod.csv	Verified (from repo file)	
+x4ebp1pt37	-1	Claude draft (NOT verified)	Low	4E-BP1; translation repressor, generally growth-inhibitory as parent protein (this phospho mark is inactivating, i.e. pro-growth)
+x4ebp1pt37t46	1	fs_mod.csv	Verified (from repo file)	
+x4ebp1pt70	1	fs_mod.csv	Verified (from repo file)	
+x4oct	0	Claude draft (NOT verified)	Low	Oct4/POU5F1; stemness factor, context-dependent oncogenic association
+x53bp1	-1	fs_mod.csv	Verified (from repo file)	
+xbp1	1	fs_mod.csv	Verified (from repo file)	
+xiap	1	Claude draft (NOT verified)	High	anti-apoptotic IAP family; oncogenic
+xpa	-1	fs_mod.csv	Verified (from repo file)	
+xpb	-1	Claude draft (NOT verified)	Medium	ERCC3; nucleotide excision repair, genome caretaker
+xpc	-1	Claude draft (NOT verified)	Medium	nucleotide excision repair; genome caretaker/tumor suppressor-like
+xpf	-1	fs_mod.csv	Verified (from repo file)	
+xrcc1	1	fs_mod.csv	Verified (from repo file)	
+yap	1	fs_mod.csv	Verified (from repo file)	
+yapps127	1	fs_mod.csv	Verified (from repo file)	
+yb1	1	fs_mod.csv	Verified (from repo file)	
+yb1ps102	1	fs_mod.csv	Verified (from repo file)	
+yboxbp1	1	Claude draft (NOT verified)	Medium	YB-1; oncogenic transcription/translation factor (drug resistance, EMT)
+zap70	1	fs_mod.csv	Verified (from repo file)	
+zhx2	0	Claude draft (NOT verified)	Low	zinc finger homeobox; context-dependent, some tumor-suppressive reports (HCC)
+znf342	0	Claude draft (NOT verified)	Low	zinc finger protein; unclear role in cancer
