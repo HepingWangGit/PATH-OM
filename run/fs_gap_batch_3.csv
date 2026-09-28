@@ -1,0 +1,54 @@
+protein	fs	confidence	note
+hsp90	1	Medium	chaperone; stabilizes oncoproteins, drug target, oncogenic-associated
+hsp90a	1	Medium	HSP90-alpha; see hsp90
+hsparc	0	Low	SPARC/osteonectin (alt. naming); matricellular protein, dual role
+hvegf	1	High	VEGF; classic angiogenesis oncogenic factor
+hydin	0	Low	ciliary protein; not an established oncogene/TSG
+igf1r	1	High	IGF1 receptor; growth factor receptor oncogene
+igf1rb	1	High	IGF1R beta subunit; see igf1r
+igf1rpy1135	1	High	IGF1R activated; see igf1r
+igf1rpy980	1	High	IGF1R activated; see igf1r
+igfbp5	0	Low	IGF binding protein; growth-inhibitory or -promoting depending on context
+igfbpb	0	Low	IGFBP family (unclear which); context-dependent
+ikbaps32	0	Low	IkB-alpha inhibitory phospho; leads to NF-kB activation (oncogenic pathway) but parent IkB is itself an NF-kB inhibitor - ambiguous
+ikbaps3236	0	Low	IkB-alpha; see ikbaps32
+irs1ps307	0	Low	IRS1; oncogenic adaptor in general, but this specific phospho mark is inhibitory (insulin resistance mark)
+jab1	1	Medium	COPS5/JAB1; promotes degradation of p27 (tumor suppressor), oncogenic
+junb	0	Low	AP-1 family; context-dependent (tumor suppressor in some myeloid contexts, oncogene in others)
+kif11	0	Low	Eg5 mitotic kinesin; proliferation-associated but not classic oncogene
+kras	1	High	classic oncogene
+ku	0	Medium	Ku70/Ku80 NHEJ complex; DNA repair, dual (caretaker vs. resistance factor)
+lkb1	-1	High	STK11; classic tumor suppressor
+mapkpt202	1	High	MAPK/ERK activated; classic oncogenic pathway
+mdm2	1	High	classic oncogene (negative regulator of p53)
+mek12ps217	1	High	MEK1/2 activated; RAS-RAF-MEK-ERK oncogenic pathway
+mek1ps217	1	High	MEK1 activated; see mek12ps217
+mek2	1	High	MEK2; oncogenic pathway kinase
+met	1	High	MET receptor tyrosine kinase; oncogene
+mgmt	0	Medium	DNA repair enzyme; associated with therapy resistance (dual role)
+mitochondria	0	High	generic mitochondrial marker (e.g. porin/VDAC); housekeeping
+mklp	0	Low	mitotic kinesin-like protein; proliferation-associated, not classic oncogene
+mlh1	-1	High	DNA mismatch repair; classic tumor suppressor
+myosin11	0	High	cytoskeletal motor protein; structural
+myosiniia	0	High	cytoskeletal motor protein; structural
+nbs1	-1	High	NBN; MRN complex DNA damage response, tumor suppressor-like
+nckips1	0	Low	NCK adaptor phospho; signaling adaptor, context-dependent
+nfkbp65	1	Medium	RelA/NF-kB subunit; generally pro-survival/oncogenic in cancer
+p14arf	-1	High	CDKN2A/ARF; classic tumor suppressor (activates p53)
+p18ink4c	-1	High	CDKN2C; CDK inhibitor, tumor suppressor
+p19	-1	Medium	CDKN2D/p19INK4d (or ARF ortholog); CDK inhibitor family, tumor suppressor
+p27pt183	-1	Medium	p27/KIP1; CDK inhibitor tumor suppressor (this phospho mark alters localization)
+p38	0	Medium	p38 MAPK; stress-activated kinase, dual role (context-dependent tumor suppressor/promoter)
+p38a	0	Medium	p38-alpha; see p38
+p38mapkpt180	0	Medium	p38 MAPK activated; see p38
+p38mapkpt180y182	0	Medium	p38 MAPK activated; see p38
+p53ps15	-1	High	p53 activated (stabilizing mark); classic tumor suppressor
+p62	0	Medium	SQSTM1; autophagy adaptor, dual role (NRF2 activation vs. quality control)
+p70s6kps371	1	High	p70S6K activated; mTOR pathway, oncogenic (drives translation/growth)
+p90rskpt359	1	Medium	RSK activated; downstream of ERK, pro-survival/oncogenic
+pal1	0	Low	PAI-1/SERPINE1; context-dependent, often associated with invasion/poor prognosis
+parp1	0	Medium	PARP1; DNA repair enzyme, dual (caretaker vs. drug-resistance factor, PARP-inhibitor target)
+parp2	0	Medium	PARP2; see parp1
+pax2	0	Low	transcription factor; oncogenic in some cancers (renal, endometrial), context-dependent
+pax8	0	Low	transcription factor; lineage-survival oncogene in some cancers (thyroid, ovarian, renal)
+paxillinpy118	0	Low	Paxillin activated; focal adhesion, pro-migratory, context-dependent

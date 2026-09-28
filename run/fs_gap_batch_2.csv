@@ -1,0 +1,54 @@
+protein	fs	confidence	note
+complexiisubunitcore2	0	High	mitochondrial complex III subunit; housekeeping/metabolic
+complexiisubunitndufb4	0	High	mitochondrial complex I subunit; housekeeping/metabolic
+complexiisubunitrieske	0	High	mitochondrial complex III Rieske subunit; housekeeping/metabolic
+complexivsubunit1	0	High	mitochondrial complex IV subunit; housekeeping/metabolic
+complexivsubunitiv	0	High	mitochondrial complex IV subunit; housekeeping/metabolic
+couptfii	0	Low	NR2F2 nuclear receptor; context-dependent role in angiogenesis/metastasis
+crm1	1	Medium	XPO1 nuclear export; overexpressed oncogenic driver, drug target (selinexor)
+cxcr4	1	Medium	chemokine receptor; promotes metastasis, oncogenic-associated
+cyclina2	1	High	cell-cycle cyclin; oncogene
+cycline	1	High	Cyclin E; frequently amplified oncogene
+cyclophilind	0	Low	PPIF; mitochondrial permeability transition pore regulator, pro-death, context-dependent
+cytokeratin19	0	High	epithelial structural marker; not oncogene/TSG
+ddb1	0	Low	DNA repair/ubiquitin ligase component; context-dependent
+dnapkcsps2056	0	Medium	DNA-PKcs; NHEJ DNA repair, dual (genome caretaker vs. therapy-resistance factor)
+dnapkcspt2609	0	Medium	DNA-PKcs; see above
+dnapkcspy393	0	Medium	DNA-PKcs; see above
+dnatopo1	0	Medium	Topoisomerase I; replication enzyme/drug target, not classic oncogene/TSG
+e2f2	1	High	E2F transcription factor family; drives cell-cycle, oncogenic
+efabp	0	Low	FABP4/E-FABP; lipid-binding protein, context-dependent
+egfrpy992	1	High	EGFR activated; classic receptor tyrosine kinase oncogene
+eif2aps51	0	Medium	eIF2alpha inhibitory phospho; integrated stress response, dual
+eif4a1	1	Medium	translation initiation helicase; supports oncogenic translation programs
+elf2aps51	0	Medium	eIF2alpha inhibitory phospho (alt. naming); see eif2aps51
+endothelin1	0	Low	vasoactive peptide; proliferation/angiogenesis-associated, context-dependent
+epha2	1	Medium	receptor tyrosine kinase; generally oncogenic, promotes invasion
+epha2ps897	1	Medium	EphA2 non-canonical activating phospho; oncogenic
+eralphaps167	1	High	ER-alpha activated; drives ER+ breast cancer
+ercc2	-1	Medium	XPD; nucleotide excision repair, genome caretaker
+erg123	1	High	ERG; ETS transcription factor, fusion oncogene (prostate cancer)
+erk5	1	Medium	ERK5/MAPK7; generally proliferative/oncogenic MAPK family member
+etv6	-1	Medium	ETV6; ETS family, generally tumor suppressor in leukemias (fusion partner)
+fakpy925	1	High	FAK activated; promotes invasion/survival, oncogenic
+fancd2	-1	High	Fanconi Anemia pathway; DNA repair tumor suppressor
+fgfrpy653y654	1	High	FGFR activated; receptor tyrosine kinase oncogene
+fortilin	1	Medium	TCTP; anti-apoptotic, overexpressed and pro-survival in many cancers
+foxo3aps318	-1	Medium	FOXO3A; tumor suppressor transcription factor (this phospho mark is inactivating, but parent is tumor-suppressive)
+fra1ps265	1	Medium	FRA1/FOSL1; AP-1 family, promotes invasion/EMT, oncogenic
+fra1ps265cleaved	1	Medium	FRA1/FOSL1; see above
+frs2apy436	1	Medium	FRS2 adaptor; downstream of oncogenic RTK signaling
+gab2py452	1	Medium	GAB2 adaptor; amplified oncogenic scaffold in breast cancer
+gata3beta	-1	Medium	GATA3; luminal differentiation marker, generally tumor suppressive in breast cancer
+gpbb	0	High	glycogen phosphorylase (brain type); metabolic enzyme
+gsk3alphabeta	0	Medium	GSK3; complex dual role (Wnt tumor suppressor arm vs. other pro-tumor roles)
+gsk3alphabetaps21	0	Medium	GSK3; see above
+gsk3alphabetaps21s9	0	Medium	GSK3; see above
+gsk3b	0	Medium	GSK3-beta; dual role
+gsk3bps9	0	Medium	GSK3-beta; dual role
+gsk3ps21	0	Medium	GSK3; dual role
+h2axps139	0	Medium	gamma-H2AX; DNA damage marker/readout, not itself an oncogene/TSG
+hiap	1	Medium	IAP family (e.g. survivin/BIRC); anti-apoptotic, oncogenic
+histoneh2a	0	High	core histone; housekeeping
+hlae	0	Low	HLA-E; NK cell ligand, immune evasion marker
+hmgb1	0	Low	chromatin/DAMP protein; dual role (inflammation, autophagy)

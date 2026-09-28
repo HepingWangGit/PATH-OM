@@ -1,0 +1,54 @@
+protein	fs	confidence	note
+abcrystallin	0	Low	alphaB-crystallin/CRYAB; stress chaperone, anti-apoptotic in some cancers, dual
+acc1ps79	0	Medium	ACC1 (lipogenesis enzyme); pro-tumor metabolism but not classic oncogene
+aib1	1	High	AIB1/NCOA3/SRC-3; amplified steroid receptor coactivator oncogene
+akt3	1	High	AKT family; classic oncogene
+alphatubulin	0	High	cytoskeletal structural/housekeeping protein
+arhi	-1	High	ARHI/DIRAS3; imprinted tumor suppressor
+atg12	0	Medium	autophagy; context-dependent dual role in cancer
+atg5	0	Medium	autophagy; context-dependent dual role in cancer
+atp5a	0	High	mitochondrial ATP synthase subunit; housekeeping/metabolic
+atp5h	0	High	mitochondrial ATP synthase subunit; housekeeping/metabolic
+atpsynthasesubunita	0	High	mitochondrial; housekeeping/metabolic
+atpsynthasesubunitd	0	High	mitochondrial; housekeeping/metabolic
+atr	-1	Medium	DNA damage checkpoint kinase; genome caretaker, though also supports cancer-cell survival under replication stress
+atrip	-1	Low	ATR-interacting protein; DNA damage response
+atrx	-1	High	chromatin remodeler; well-established tumor suppressor (glioma, pNET)
+auroraapt288	1	High	Aurora Kinase A; classic mitotic oncogene
+axlpt702	1	High	AXL receptor tyrosine kinase; oncogene, drives resistance/EMT
+b7h3	1	Low	CD276 immune checkpoint; promotes immune evasion (oncogenic-associated)
+bcl2a1	1	High	anti-apoptotic BCL2 family; oncogene
+bcl2ps70	1	High	BCL2; anti-apoptotic oncogene
+betacateninps33	1	Medium	beta-catenin; Wnt pathway oncogene (this phospho mark is degradation-tagging/inactivating, but parent is oncogenic)
+betacateninps33s37t41	1	Medium	beta-catenin; see above
+bip	1	Medium	GRP78/HSPA5; ER stress chaperone, generally pro-survival/oncogenic in cancer
+bmk1erk5pt218y220	1	Medium	ERK5/BMK1; MAPK family, generally proliferative/oncogenic
+bmx	1	Medium	BMX/ETK non-receptor tyrosine kinase; oncogenic survival signaling
+bop1	0	Low	ribosome biogenesis factor; overexpressed in some cancers but not classic oncogene
+brca1	-1	High	classic tumor suppressor
+caseinkinase	0	Low	CK1/CK2 family; dual role, highly context-dependent
+caseinkinase1epsillon	0	Low	CK1-epsilon; Wnt regulator, dual role
+cask	0	Low	scaffolding kinase; not classically oncogene/TSG
+caspase3active	-1	High	executioner apoptosis caspase; pro-death, opposes cancer
+caspase7	-1	High	executioner apoptosis caspase; pro-death
+caspase8cleaved	-1	High	active initiator caspase; pro-apoptotic
+caspase9	-1	High	initiator caspase; pro-apoptotic
+caspase9cleaved	-1	High	active initiator caspase; pro-apoptotic
+cd11a	0	Medium	ITGAL; immune adhesion molecule, not a tumor-cell oncogene/TSG
+cd26	0	Low	DPP4; dual role depending on cancer type
+cd49	0	Medium	integrin alpha subunit; adhesion, context-dependent
+cd68	0	High	macrophage marker; not a tumor-cell oncogene/TSG
+cd86	0	High	immune costimulatory molecule; not a tumor-cell oncogene/TSG
+cdk1py15	1	Medium	CDK1; mitotic driver oncogene (this phospho mark is inhibitory, but parent is oncogenic)
+cdk2	1	High	cell-cycle kinase; oncogene
+cdk4	1	High	cell-cycle kinase; frequently amplified oncogene, drug target
+chk1ps317	-1	Medium	Chk1; DNA damage checkpoint/genome caretaker pathway
+cjun	1	High	AP-1 transcription factor; oncogene
+cmetpy1234y1235	1	High	c-Met activated; receptor tyrosine kinase oncogene
+cmycpt58	1	Medium	c-Myc; major oncogene (this phospho mark is destabilizing, but parent is oncogenic)
+cofilin	0	Low	actin dynamics regulator; pro-invasion when active, context-dependent
+cofilinps3	0	Low	phospho-cofilin (inactive form); context-dependent
+complexiisubunit	0	High	mitochondrial complex II subunit; housekeeping/metabolic
+complexiisubunit30	0	High	mitochondrial complex II subunit; housekeeping/metabolic
+complexiisubunit30kdaip	0	High	mitochondrial complex II subunit; housekeeping/metabolic
+complexiisubunit70kdafp	0	High	mitochondrial complex II subunit; housekeeping/metabolic

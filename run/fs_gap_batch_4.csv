@@ -1,0 +1,52 @@
+protein	fs	confidence	note
+pdh	0	High	pyruvate dehydrogenase; metabolic enzyme
+pdha1	0	High	pyruvate dehydrogenase subunit; metabolic enzyme
+pkcbetaiips660	1	Low	PKC-beta II activated; PKC family generally pro-proliferative
+plcr2py759	0	Low	PLC-gamma2 activated; downstream of RTK signaling, context-dependent
+plk4	0	Low	Polo-like kinase 4; centriole duplication, amplification linked to cancer but not classic oncogene
+prkag2	-1	Low	AMPK gamma2 subunit; AMPK pathway generally growth-inhibitory/tumor-suppressive
+prmt5	1	Medium	protein arginine methyltransferase; overexpressed epigenetic oncogenic driver
+prohibitin	0	Low	mitochondrial/membrane scaffold; context-dependent (tumor suppressive or oncogenic)
+ptch	-1	High	PTCH1; Hedgehog pathway, classic tumor suppressor
+puma	-1	High	BBC3; pro-apoptotic BH3-only protein, tumor-suppressive
+pygm	0	High	glycogen phosphorylase (muscle type); metabolic enzyme
+rasd2	0	Low	Rhes; Ras-related GTPase, context-dependent
+rbps807	-1	Medium	Rb; classic tumor suppressor (this phospho mark is inactivating)
+rock1	0	Low	Rho kinase; promotes invasion/migration, context-dependent
+rpa32ps33	0	Medium	RPA32; replication/DNA damage factor, not classically oncogene/TSG on its own
+s6ps235	1	Medium	ribosomal S6 activated; mTOR pathway growth/translation marker
+s6ps240	1	Medium	ribosomal S6 activated; see s6ps235
+smad3ps423	0	Medium	SMAD3 activated; TGF-beta pathway, dual role (tumor suppressive early, pro-metastatic late)
+smad6	0	Low	inhibitory SMAD; TGF-beta pathway regulator, context-dependent
+socs2	-1	Low	suppressor of cytokine signaling; generally negative-feedback/tumor-suppressive
+sparc	0	Low	matricellular glycoprotein; dual role (context-dependent)
+spib	0	Low	ETS transcription factor (immune lineage); not an established tumor-cell oncogene/TSG
+stat3py727	1	High	STAT3 activated; classic oncogenic transcription factor
+stat5py694	1	High	STAT5 activated; oncogenic, especially in leukemias
+stat6py641	0	Low	STAT6 activated; Th2/immune signaling, context-dependent in cancer
+statpy694	0	Low	generic STAT phospho (unclear which STAT); context-dependent
+syntaxab2	0	High	syntaxin; vesicle trafficking, not oncogene/TSG
+tazps89	1	Medium	TAZ/WWTR1; Hippo pathway effector, oncogenic (this phospho mark is inactivating)
+tcf4	1	Low	TCF7L2; Wnt pathway transcription factor, oncogenic in Wnt-driven cancers (colorectal)
+telomerase	1	High	TERT; classic oncogene (reactivated in most cancers)
+tff1	0	Low	trefoil factor; estrogen-regulated, context-dependent
+tgif2	0	Low	transcriptional repressor; context-dependent, some oncogenic reports (ovarian)
+tif1	0	Low	TRIM24/TIF1-alpha; oncogenic in some cancers (regulates p53 degradation)
+tim3	0	Low	HAVCR2 immune checkpoint; promotes immune evasion (oncogenic-associated)
+top1	0	Medium	Topoisomerase I; replication enzyme/drug target, not classic oncogene/TSG
+trfc	0	Low	transferrin receptor/TFRC; proliferation-associated, iron metabolism
+tsc2	-1	High	TSC2; classic tumor suppressor (mTOR pathway negative regulator)
+tsc2pt1462	-1	Medium	TSC2; tumor suppressor (this phospho mark is inactivating)
+tu30	0	Low	unclear/unidentified antibody target
+ubiquitinclonep4d1a11	0	Low	generic ubiquitin antibody clone; not a specific oncogene/TSG
+uqcrc2	0	High	mitochondrial complex III subunit; housekeeping/metabolic
+vegf	1	High	classic angiogenesis oncogenic factor
+x1433sigma	-1	Medium	14-3-3 sigma/SFN; generally tumor suppressor (silenced in many cancers)
+x4ebp1pt37	-1	Low	4E-BP1; translation repressor, generally growth-inhibitory as parent protein (this phospho mark is inactivating, i.e. pro-growth)
+x4oct	0	Low	Oct4/POU5F1; stemness factor, context-dependent oncogenic association
+xiap	1	High	anti-apoptotic IAP family; oncogenic
+xpb	-1	Medium	ERCC3; nucleotide excision repair, genome caretaker
+xpc	-1	Medium	nucleotide excision repair; genome caretaker/tumor suppressor-like
+yboxbp1	1	Medium	YB-1; oncogenic transcription/translation factor (drug resistance, EMT)
+zhx2	0	Low	zinc finger homeobox; context-dependent, some tumor-suppressive reports (HCC)
+znf342	0	Low	zinc finger protein; unclear role in cancer
