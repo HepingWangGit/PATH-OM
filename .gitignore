@@ -44,5 +44,7 @@ logs/
 
 # Local scratch (this session's cache of large regeneratable intermediates)
 run/cache/
+run/cache_fskorkut/
 run/__pycache__/
 run/*.log
+run/sweep_fskorkut_log.txt

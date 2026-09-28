@@ -3,13 +3,20 @@ import pandas as pd
 import numpy as np
 from utils import count_consecutive_elements
 
-def load_data(protein_set='258'):
+def load_data(protein_set='289'):
     # PATCHED: parameterized to reproduce the paper's two reported protein-set sizes.
-    # protein_set='258' -> elim_threshold = mean/2 (289 columns before fs_mod.csv trim,
-    #   matching the paper's "289-protein" configuration exactly; 258 after trim).
-    # protein_set='318' -> no adaptive-sparsity threshold at all, i.e. every protein
-    #   column with at least one non-missing observation (528 columns before trim,
-    #   matching the paper's "528-protein" configuration exactly; 318 after trim).
+    # protein_set='289' -> elim_threshold = mean/2 (the paper's "289-protein" configuration).
+    # protein_set='528' -> no adaptive-sparsity threshold at all, i.e. every protein
+    #   column with at least one non-missing observation (the paper's "528-protein"
+    #   configuration).
+    # UPDATED 2026-09-28: now uses the literature-reconstructed fs_korkut.csv (528
+    # proteins, full coverage of every protein column in Targetscores_v5.csv) instead
+    # of the earlier fs_mod.csv substitute (318 proteins, which forced both configs to
+    # be trimmed down to 258/318 -- see TargetScore_replication_report.md for that
+    # history). With fs_korkut.csv, zero protein columns are dropped for missing fs
+    # entries in either config, so protein_set='289' now yields exactly 289 protein
+    # columns and protein_set='528' now yields exactly 528 -- matching the paper's
+    # reported counts exactly for the first time.
 
     all_ts = pd.read_csv('all_ts.csv', sep='\t', index_col=0)
     all_ts = all_ts.fillna('#')
@@ -63,26 +70,29 @@ def load_data(protein_set='258'):
     dose_info = []
 
     targetscores = targetscores[targetscores.columns[(targetscores.isna().all()==0)].to_list()]
-    if protein_set == '258':
+    if protein_set == '289':
         elim_threshold = ((targetscores.isna()==0).sum().mean()/2) #+ 2000
         targetscores = targetscores[targetscores.columns[(targetscores.isna()==0).sum()>elim_threshold].to_list()]
-    elif protein_set == '318':
-        pass  # no additional column filter -- keep all non-all-NaN protein columns (528 before fs_mod trim)
+    elif protein_set == '528':
+        pass  # no additional column filter -- keep all non-all-NaN protein columns
     else:
         raise ValueError(f"unknown protein_set {protein_set!r}")
 
-    # PATCHED: original 'fs_korkut.csv' is missing from the GitHub repo (confirmed absent
-    # from both commits in git history). Substituting 'fs_mod.csv' per user instruction.
-    # fs_mod.csv only covers a subset of protein columns (~318/528 in a header sample),
-    # so targetscore columns without a matching fs entry are dropped here rather than
-    # guessed, to avoid silently fabricating functional-score signs.
-    fs_file = pd.read_csv('fs_mod.csv', sep=',', index_col=0)
+    # UPDATED 2026-09-28: original 'fs_korkut.csv' was missing from the GitHub repo
+    # (confirmed absent from both commits in git history). It has now been reconstructed:
+    # 318 of its 528 protein entries come directly from fs_mod.csv (a repo file, taken
+    # as-is / verified), and the remaining 210 were researched against primary cancer-
+    # biology literature this session (each with a cited source; see
+    # fs_korkut_ANNOTATED_for_review.csv / fs_korkut_for_professor_review.xlsx for full
+    # provenance and citations -- sent to the professor for double-checking). This file
+    # covers every protein column in Targetscores_v5.csv, so nothing is dropped here.
+    fs_file = pd.read_csv('fs_korkut.csv', sep=',', index_col=0)
     fs_file.index = [str(i).lower() for i in fs_file.index]
-    fs_file = fs_file[~fs_file.index.duplicated(keep='first')]  # PATCHED: 'x53bp1' is duplicated in fs_mod.csv
+    fs_file = fs_file[~fs_file.index.duplicated(keep='first')]  # 'x53bp1'-style dup guard, kept from the fs_mod.csv patch
     available_cols = [col for col in targetscores.columns if col.lower() in fs_file.index]
     dropped_cols = [col for col in targetscores.columns if col.lower() not in fs_file.index]
-    print(f"[fs_mod.csv patch] keeping {len(available_cols)} / {len(targetscores.columns)} protein columns; "
-          f"dropping {len(dropped_cols)} columns with no fs_mod.csv entry")
+    print(f"[fs_korkut.csv] keeping {len(available_cols)} / {len(targetscores.columns)} protein columns; "
+          f"dropping {len(dropped_cols)} columns with no fs_korkut.csv entry")
     targetscores = targetscores[available_cols]
     fs_list = [int(fs_file.loc[col.lower(), 'fs']) for col in targetscores.columns]
 

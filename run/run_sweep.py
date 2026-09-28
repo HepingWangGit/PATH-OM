@@ -3,9 +3,13 @@ matplotlib.use('Agg')
 import numpy as np
 import time, json, os, pickle, sys, traceback
 
-CACHE_DIR = '/home/claude/TargetScore/run/cache'
+# UPDATED 2026-09-28: fresh cache dir + results path for the fs_korkut.csv-based rerun,
+# so this never silently reuses pickles built from the old fs_mod.csv substitution
+# (protein_set labels also changed from '258'/'318' to '289'/'528' to match, since the
+# reconstructed fs_korkut.csv now yields the paper's exact protein counts).
+CACHE_DIR = '/home/claude/TargetScore/run/cache_fskorkut'
 os.makedirs(CACHE_DIR, exist_ok=True)
-RESULTS_PATH = '/home/claude/TargetScore/run/sweep_results.json'
+RESULTS_PATH = '/home/claude/TargetScore/run/sweep_results_fskorkut.json'
 
 def cpath(name):
     return os.path.join(CACHE_DIR, name)
@@ -39,7 +43,7 @@ from mean_imputation import mean_impute_targetscores
 from training import training_machine
 from evaluation import evaluate_model_metrics
 
-PROTEIN_SETS = ['258', '318']
+PROTEIN_SETS = ['289', '528']
 IMPUTATIONS = ['mean', 'ml']
 MODELS = [('c-ml', 'xgb'), ('c-ml', 'rf'), ('c-ml', 'ensemble'), ('nn', 'tsnn'), ('nn', 'attention')]
 
