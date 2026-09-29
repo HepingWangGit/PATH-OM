@@ -16,8 +16,24 @@ def training_machine(targetscores, dict_list, features, model_type, model_name):
     count = 0
     remcol = []
     for column in targetscores.columns:
+        n_valid = targetscores[column].notna().sum()
         if targetscores[column].isna().sum() > 0:
-            if targetscores[column].isna().sum() == targetscores.shape[0]:
+            # UPDATED 2026-09-28 (Bug 8, found running the 528-protein config with the new
+            # fs_korkut.csv, which for the first time includes very sparse proteins that
+            # the old fs_mod.csv substitution had simply dropped): the original check only
+            # caught a column that is LITERALLY all-NaN. But imputation.py's own ML-based
+            # imputation deliberately leaves a protein's missing rows as NaN, un-predicted,
+            # whenever that protein has fewer than 5 real observations in the whole dataset
+            # (its own "#samples < 5" cutoff -- see imputation.py). Such a column is not
+            # ALL NaN (the handful of real rows survive), but it is still >99% NaN and
+            # unfit to train a label on: XGBoost/RF hard-crash on it ("Label contains NaN"),
+            # while the nn models silently produce NaN correlations/losses for the whole
+            # fold without ever raising -- which is how this surfaced (528|ml|tsnn logging
+            # "Train Corr = nan" every fold instead of erroring like 528|ml|xgb did).
+            # Generalized to the same standard imputation.py itself already uses: fewer
+            # than 5 real (non-NaN) values anywhere in the column means this protein can't
+            # be reliably modeled from this data, all-NaN or not.
+            if n_valid < 5:
                 count += 1
                 remcol.append(column)
 

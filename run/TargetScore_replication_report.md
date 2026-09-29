@@ -1,8 +1,45 @@
-# TargetScore Paper — Replication & Reproducibility Report (v2 — full sweep)
+# TargetScore Paper — Replication & Reproducibility Report (v3 — real fs_korkut.csv)
 
 **Repo:** https://github.com/cekayan/TargetScore.git
 **Paper:** "Machine learning prediction of adaptive proteomic responses to targeted therapies" (Wang, Kayan, Taskin, Korkut)
 **Pipeline exercised:** a patched copy of `ModularMM3/`, kept in `run/` (data_loader → data_preprocessing → imputation (mean or ML-based) → training (5 architectures, genuine 5-fold CV) → evaluation)
+
+## v3 addendum (2026-09-28/29) — fs_korkut.csv reconstructed, exact 289/528 protein counts, one new bug found and fixed
+
+Everything below this addendum is the v2 report, unchanged, describing the earlier fs_mod.csv-substitution run (258/318 proteins). This addendum supersedes its protein-set numbers with the real ones.
+
+**What changed.** `fs_korkut.csv` (the file with each protein's ±1/0 functional-score sign, needed for the TargetScore equation and specifically consumed by the TSNN model's `TSEquationLayer`) was reconstructed this session: 318 of its 528 entries come as-is from the repo's `fs_mod.csv` (unchanged, already verified), and the remaining 210 were researched against primary cancer-biology literature (UniProt, GeneCards, PubMed/PMC reviews), each with a cited source — sent separately to Prof. Korkut for double-checking (`fs_korkut_ANNOTATED_for_review.csv` / `fs_korkut_for_professor_review.xlsx`). `data_loader.py` and `run_sweep.py` now use this file instead of `fs_mod.csv`, and the two protein-set configurations are relabeled `'289'`/`'528'` (from `'258'`/`'318'`) because they now yield **exactly** the paper's own protein counts, with zero columns dropped for a missing fs entry — for the first time, nothing about this replication's protein sets is an approximation.
+
+**One new bug found and fixed (Bug 8).** Re-running the full sweep with all 528 proteins surfaced a real defect that the smaller fs_mod.csv-substituted runs never triggered: `imputation.py`'s ML-based imputation deliberately leaves a protein's missing rows as NaN when that protein has fewer than 5 real observations anywhere in the dataset (by design — see Bug 7 in the v2 report below). Four proteins in the full 528-protein set fall into this bucket (`cdk2`, `cdk4`, `p53ps15`, `prmt5` — each with only 4 real observations out of 3,805 rows). `training.py`'s existing NaN-column cleanup only dropped a column if it was *literally 100% NaN*; these columns are ~99.9% NaN, so they slipped through. XGBoost/RF correctly hard-crashed on it (`Label contains NaN`); the neural-net models did not crash but silently produced `nan` for every fold's correlation and loss, which would have been very easy to miss in a quick read of results. Fixed by generalizing `training.py`'s column-drop check from "all rows NaN" to "fewer than 5 non-NaN rows" — the same cutoff `imputation.py` itself already uses to decide a protein is unmodelable. All 20 configurations now complete cleanly with no errors and no NaNs.
+
+**Full results — all 20 configurations, exact paper protein counts (289/528), genuine 5-fold CV:**
+
+| Protein set | Imputation | Model | Pearson r (mean ± sd) | R² (mean ± sd) | IP accuracy (mean ± sd) |
+|---|---|---|---|---|---|
+| 289 | mean | XGBoost | 0.710 ± 0.007 | 0.502 ± 0.009 | 68.2% ± 0.1% |
+| 289 | mean | Random Forest | 0.478 ± 0.011 | 0.228 ± 0.010 | 64.1% ± 0.1% |
+| 289 | mean | XGB+RF Ensemble | 0.685 ± 0.007 | 0.451 ± 0.008 | 67.2% ± 0.1% |
+| 289 | mean | TargetScore-Inspired NN | 0.537 ± 0.017 | 0.267 ± 0.022 | 63.4% ± 0.2% |
+| 289 | mean | Attention-based NN | 0.126 ± 0.005 | -0.052 ± 0.008 | 61.1% ± 0.3% |
+| 289 | ml | XGBoost | 0.701 ± 0.007 | 0.488 ± 0.009 | 67.6% ± 0.1% |
+| 289 | ml | Random Forest | 0.482 ± 0.006 | 0.227 ± 0.005 | 63.5% ± 0.1% |
+| 289 | ml | XGB+RF Ensemble | 0.682 ± 0.007 | 0.442 ± 0.007 | 66.7% ± 0.1% |
+| 289 | ml | TargetScore-Inspired NN | 0.484 ± 0.011 | 0.185 ± 0.015 | 60.9% ± 0.3% |
+| 289 | ml | Attention-based NN | 0.099 ± 0.004 | -0.108 ± 0.010 | 59.8% ± 0.1% |
+| 528 | mean | XGBoost | 0.721 ± 0.005 | 0.516 ± 0.006 | 68.6% ± 0.0% |
+| 528 | mean | Random Forest | 0.468 ± 0.005 | 0.218 ± 0.004 | 64.4% ± 0.1% |
+| 528 | mean | XGB+RF Ensemble | 0.695 ± 0.005 | 0.464 ± 0.004 | 67.7% ± 0.1% |
+| 528 | mean | TargetScore-Inspired NN | 0.586 ± 0.015 | 0.336 ± 0.020 | 64.4% ± 0.5% |
+| 528 | mean | Attention-based NN | 0.117 ± 0.004 | -0.045 ± 0.006 | 61.9% ± 0.1% |
+| 528 | ml | XGBoost | 0.708 ± 0.004 | 0.498 ± 0.005 | 67.8% ± 0.0% |
+| 528 | ml | Random Forest | 0.451 ± 0.008 | 0.190 ± 0.007 | 63.2% ± 0.1% |
+| 528 | ml | XGB+RF Ensemble | 0.693 ± 0.005 | 0.450 ± 0.003 | 66.8% ± 0.0% |
+| 528 | ml | TargetScore-Inspired NN | 0.548 ± 0.002 | 0.268 ± 0.006 | 61.1% ± 0.1% |
+| 528 | ml | Attention-based NN | 0.117 ± 0.003 | -0.098 ± 0.005 | 60.1% ± 0.2% |
+
+(Raw JSON: `run/sweep_results_fskorkut.json`. Table: `run/sweep_table_fskorkut.md`.)
+
+**The honest finding: getting the exact protein counts right did not meaningfully close the gap to the paper.** Comparing against the v2 report's 258/318-protein numbers below, the new 289/528-protein numbers are nearly identical for XGBoost, Random Forest, Ensemble, and Attention (differences within or barely outside fold-to-fold noise, in both directions). The one model that plausibly moved for a mechanistic reason is TargetScore-Inspired NN — the only architecture that actually consumes the fs vector (`TSEquationLayer`) — whose R² rose from 0.303 to 0.336 in the mean/528 config, but it *fell* from 0.316 to 0.267 in the mean/289 config. Given the underlying protein sets differ between old and new configs (not just their fs completeness), this isn't clean evidence either way, and I'm not going to oversell it. The practical implication: the fs_korkut.csv substitution was real and worth fixing (the paper's protein counts are now matched exactly, which matters for methodological correctness and for anything a reviewer might spot-check), but it was **not** the primary driver of this replication's remaining gap to the published numbers. That means the other open items below — the Attention-NN architecture discrepancy, the 4,477-vs-9,850 sample-count gap, and the from-Methods-text mean-imputation reconstruction — remain the most likely explanations and the priority items to resolve with the student/professor before submission.
 
 ## Bottom line
 
