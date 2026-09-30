@@ -48,3 +48,4 @@ run/cache_fskorkut/
 run/__pycache__/
 run/*.log
 run/sweep_fskorkut_log.txt
+run/rerun_attention_log.txt

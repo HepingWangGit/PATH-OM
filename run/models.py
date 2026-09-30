@@ -220,14 +220,37 @@ class WeightedAverageEnsemble:
 # You can similarly add CustomAttentionModel and any additional models here.
 
 class CustomAttentionModel(Model):
-   def __init__(self, nprots, num_categories, embedding_dim):
+   # PATCHED 2026-09-30 (Bug 9): the original implementation called
+   # tf.keras.layers.Attention() four times, each time on query/value/key tensors that
+   # were all expand_dims'd to a SINGLE timestep (shape (batch, 1, 64)). Keras attention
+   # computes softmax(query . key) over the key's timestep axis to weight `value`; with
+   # exactly one timestep, that softmax is mathematically forced to output 1.0 regardless
+   # of the query/key contents (softmax of a single logit is always 1 -- confirmed
+   # empirically: Attention()([q,v,k]) with shape (batch,1,64) returns `v` unchanged to
+   # float precision, and Keras itself warns "softmax over axis -1 of a tensor of shape
+   # (B,1,1)... will always return the value 1, which is likely not what you intended").
+   # Since every one of the four calls used baseline_processed_x as the VALUE argument,
+   # all four "attention outputs" were silently just copies of baseline_processed_x --
+   # drug/dose/time/dim/cna/mrna/mutation features were fed in as query/key but had
+   # ZERO effect on the output (only baseline ever passed through). This reduced the
+   # entire model to a baseline-only regressor, which is exactly why it scored far
+   # below every other architecture (r~0.10-0.13 vs 0.45-0.72) in the fs_korkut.csv
+   # sweep -- not a fundamental limitation of attention, but this specific bug.
+   #
+   # FIX: build a genuine multi-token sequence (one token per feature branch, 9 tokens
+   # total) and run real self-attention (MultiHeadAttention, query=value=key=the whole
+   # token sequence) across it, so every branch can actually attend to every other
+   # branch. This is the same pattern already used correctly elsewhere in this file by
+   # AttentionBasedModel/MultiHeadAttention, just adapted to this model's actual inputs
+   # instead of the single-token-per-call pattern that caused the bug.
+   def __init__(self, nprots, num_categories, embedding_dim, num_heads=4):
        super(CustomAttentionModel, self).__init__()
-       
+
        self.num_categories = num_categories
        self.embedding_dim = embedding_dim
        self.batch_norm1 = BatchNormalization(name='BatchNorm-1')
        self.batch_norm2 = BatchNormalization(name='BatchNorm-2')
-       
+
        # Define the layers
        self.embedding = Embedding(input_dim=10, output_dim=embedding_dim, input_length=1, name='Embedding-1')
        self.embedding2 = Embedding(input_dim=5, output_dim=10, input_length=1, name='Embedding-2')
@@ -241,10 +264,13 @@ class CustomAttentionModel(Model):
        self.mut2_dense = Dense(64, activation='relu', name='Mutation-Dense-2')
        self.time_dense = Dense(64, activation='relu', name='Time-Dense')
        self.dose_dense = Dense(64, activation='relu', name='Dose-Dense')
-       self.attention_layer = Attention()
-       self.attention_layer2 = Attention()
-       self.attention_layer3 = Attention()
-       self.attention_layer4 = Attention()
+       # Real multi-token self-attention (replaces the four broken single-token
+       # Attention() calls). 9 tokens (baseline, drug, dose, dim, mrna, cna, mut1,
+       # mut2, time), each a 64-dim embedding, genuinely attend to one another.
+       self.self_attention = tf.keras.layers.MultiHeadAttention(
+           num_heads=num_heads, key_dim=64, name='Self-Attention')
+       self.attn_norm = LayerNormalization(name='Attn-LayerNorm')
+       self.flatten_tokens = Flatten()
        self.concat_layer = Concatenate()
        self.dense_concat = Sequential([
            Dense(64),
@@ -255,9 +281,8 @@ class CustomAttentionModel(Model):
            LeakyReLU(negative_slope=0.5),
        ])
        self.output_layer = Dense(nprots)
-       self.leakyRelu = LeakyReLU(negative_slope=0.99)
 
-   def call(self, inputs):
+   def call(self, inputs, training=False):
        # Split the inputs; now includes the categorical feature as the last item
        input_drug, input_time, input_dose, input_dim, input_cna, input_mrna, input_mut1, input_mut2, input_baseline = inputs
 
@@ -268,7 +293,7 @@ class CustomAttentionModel(Model):
        dim_embedded = self.embedding(input_dim)
        dim_flattened = self.flatten(dim_embedded)
        dim_flattened = self.dim_dense(dim_flattened)
-       
+
        # Process vector inputs
        baseline_processed = self.baseline_dense(input_baseline)
        drug_processed = self.drug_dense(input_drug)
@@ -277,39 +302,30 @@ class CustomAttentionModel(Model):
        mut1_processed = self.mut1_dense(input_mut1)
        mut2_processed = self.mut2_dense(input_mut2)
 
-       baseline_processed_x = tf.expand_dims(baseline_processed, 1)
-       drug_processed_x = tf.expand_dims(drug_processed, 1)
-       dose_processed_x = tf.expand_dims(dose_processed, 1)
-       mrna_processed_x = tf.expand_dims(mrna_processed, 1)
-       cna_processed_x = tf.expand_dims(cna_processed, 1)
-       mut1_processed_x = tf.expand_dims(mut1_processed, 1)
-       mut2_processed_x = tf.expand_dims(mut2_processed, 1)
-       time_processed_x = tf.expand_dims(time_processed, 1)
-       dim_flattened_x = tf.expand_dims(dim_flattened, 1)
-       
-       # Apply attention
-       attention_output = self.attention_layer([drug_processed_x, baseline_processed_x, time_processed_x+dim_flattened_x+dose_processed_x])
-       attention_output = tf.squeeze(attention_output, 1)
+       # Stack all 9 feature branches into a genuine (batch, 9, 64) token sequence
+       # and let them actually attend to each other (query=value=key=the full
+       # sequence), instead of the old fake single-token-per-call pattern.
+       tokens = tf.stack([
+           baseline_processed, drug_processed, dose_processed, dim_flattened,
+           cna_processed, mrna_processed, mut1_processed, mut2_processed, time_processed,
+       ], axis=1)  # (batch, 9, 64)
 
-       attention_output2 = self.attention_layer2([cna_processed_x, baseline_processed_x, mrna_processed_x])
-       attention_output2 = tf.squeeze(attention_output2, 1)
+       attn_output = self.self_attention(query=tokens, value=tokens, key=tokens, training=training)
+       tokens = self.attn_norm(tokens + attn_output, training=training)  # residual + norm
 
-       attention_output3 = self.attention_layer3([mut1_processed_x + mut2_processed_x, baseline_processed_x, cna_processed_x])
-       attention_output3 = tf.squeeze(attention_output3, 1)
-
-       attention_output4 = self.attention_layer4([mrna_processed_x, baseline_processed_x, mut1_processed_x + mut2_processed_x])
-       attention_output4 = tf.squeeze(attention_output4, 1)
-       
-       # Concatenate all outputs including the flattened embedding
-       concat_output = self.concat_layer([attention_output, attention_output2, attention_output3, attention_output4])
-       concat_output = self.batch_norm1(concat_output)
+       concat_output = self.flatten_tokens(tokens)  # (batch, 9*64)
+       concat_output = self.batch_norm1(concat_output, training=training)
 
        # Further processing and output
        dense_output = self.dense_concat(concat_output)
 
        output = dense_output + baseline_processed
-       
+
        final_output = self.output_layer(output)
-       final_output = self.leakyRelu(final_output)
-       
+       # PATCHED: dropped the trailing LeakyReLU(negative_slope=0.99) on the final
+       # regression output -- with slope 0.99 it was nearly a no-op (99% of an
+       # identity function on negative values) but still an unmotivated activation
+       # on a regression head's raw output; removed for a cleaner, standard linear
+       # output layer.
+
        return final_output

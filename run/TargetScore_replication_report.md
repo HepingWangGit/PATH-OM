@@ -1,8 +1,62 @@
-# TargetScore Paper — Replication & Reproducibility Report (v3 — real fs_korkut.csv)
+# TargetScore Paper — Replication & Reproducibility Report (v4 — Attention-NN bug fixed, sample-count gap explained, replicate-leakage risk identified)
 
-**Repo:** https://github.com/cekayan/TargetScore.git
+**Repo:** https://github.com/HepingWangGit/PATH-OM (new tracking repo; superseded the original student's `cekayan/TargetScore`)
 **Paper:** "Machine learning prediction of adaptive proteomic responses to targeted therapies" (Wang, Kayan, Taskin, Korkut)
 **Pipeline exercised:** a patched copy of `ModularMM3/`, kept in `run/` (data_loader → data_preprocessing → imputation (mean or ML-based) → training (5 architectures, genuine 5-fold CV) → evaluation)
+
+## v4 addendum (2026-09-30) — the Attention-NN gap was a real bug, not a fundamental limitation; sample-count gap traced to its source; a likely metrics-inflation risk identified
+
+This addendum answers the two open items the v3 addendum flagged as the priority: the Attention-NN architecture discrepancy, and the 4,477-vs-9,850 sample-count gap. It also surfaces a third issue neither report had looked for: a real risk that the current cross-validation setup inflates every model's reported correlation/R², not just the attention model's.
+
+### Bug 9 — the Attention-NN's attention mechanism was a mathematical no-op
+
+`CustomAttentionModel` (`models.py`) processes 9 feature branches (baseline proteomics, drug, dose, time, 2D/3D, CNA, mRNA, two mutation vectors), each into a 64-dim vector, then called Keras's `Attention()` layer four times to combine them. The bug: every one of those four calls wrapped each vector in `tf.expand_dims(x, 1)` first, i.e. every query/value/key tensor had a sequence length of exactly **1**. Attention computes `softmax(query · key)` over the key's sequence axis to decide how much of `value` to keep — and the softmax of a single number is *always exactly 1.0*, regardless of what that number is. So every one of the four attention calls, regardless of its query/key inputs, returned its `value` argument completely unchanged. All four calls used `baseline_processed` as the value, so **all four "attention outputs" were silently identical copies of the baseline features** — drug, dose, time, 2D/3D, CNA, mRNA, and both mutation vectors were fed into the model but had zero effect on its output. The model had collapsed, undetected, into a baseline-only regressor.
+
+This was confirmed two ways: (1) directly, with a 6-line TensorFlow reproduction — `Attention()([q, v, k])` with 1-timestep tensors returns `v` to float precision, every time, for random `q`/`k`; (2) Keras itself emits a warning when this happens (`"softmax over axis -1 of a tensor of shape (B,1,1)... will always return the value 1, which is likely not what you intended"`) — a warning that was almost certainly firing in every prior training run and simply never surfaced in the logs that were being read.
+
+**This fully explains the gap.** A baseline-only regressor scoring r ≈ 0.10–0.13 while every other model (which does see drug/dose/genomics features) scores 0.45–0.72 is exactly the pattern a real bug like this predicts — not evidence that attention-based architectures are unsuited to this problem.
+
+**Fix:** rewrote `CustomAttentionModel` to build a genuine 9-token sequence (one token per feature branch, stacked to shape `(batch, 9, 64)`) and run real self-attention (`MultiHeadAttention`, query=value=key=the full token sequence) across it, so every branch can actually attend to every other branch — the same pattern already used correctly elsewhere in `models.py` by the (unused) `AttentionBasedModel` class, adapted to this model's actual inputs. Also removed an unmotivated `LeakyReLU(negative_slope=0.99)` on the final regression output (near-identity, but not standard practice for a regression head).
+
+**Result — all 4 attention configurations rerun, everything else held fixed:**
+
+| Config | Old r (buggy) | New r (fixed) | Where it now ranks |
+|---|---|---|---|
+| 289 / mean | 0.126 ± 0.005 | **0.621 ± 0.027** | 3rd of 5 (was last) — above tsnn, rf |
+| 289 / ml | 0.099 ± 0.004 | **0.495 ± 0.019** | 3rd of 5 (was last) — above tsnn, rf |
+| 528 / mean | 0.117 ± 0.004 | **0.592 ± 0.011** | 3rd of 5 (was last) — above tsnn, rf |
+| 528 / ml | 0.117 ± 0.003 | **0.504 ± 0.018** | 3rd of 5 (was last) — above rf |
+
+Full updated 20-row table: `run/sweep_table_fskorkut.md` / `run/sweep_results_fskorkut.json` (in place, same files as the v3 addendum — only the four `attention` rows changed). The attention model is no longer an outlier: it now sits mid-pack, consistent with every other architecture's replication gap to the paper, rather than being off by 5-7x. This closes the single largest unexplained discrepancy from the v3 addendum.
+
+### Sample-count gap (4,477 vs. paper's 9,850) — traced to two separate, compounding causes
+
+Instrumented `data_loader.py`'s filter chain to print the row count surviving each step, starting from the raw 11,940-row `Targetscores_v5.csv`:
+
+| Step | Rows remaining | Dropped | Cause |
+|---|---|---|---|
+| Raw file | 11,940 | — | — |
+| Cell line has a baseline RPPA profile in `TCPA_CCLE_RPPA500.tsv` | 7,623 | 4,317 (36%) | **Not a bug.** This specific 878-cell-line reference panel simply does not cover many of the exact cell lines/sublines used in the underlying experiments — including common, standard lines. Confirmed directly: `BT549`, `LNCaP`, `MCF10A`, and `OVCAR3` are all absent from this panel (checked by exact and normalized/case-insensitive name matching — no near-miss spelling issue, they are genuinely not in the file). A large share of the rest of the drop is drug-resistant sublines and patient-derived models (`A375-BR`, `WM164BR`, `BAF3 KRAS`, `M1`…`M624`-style patient IDs, etc.) that would not be expected in any pan-cancer cell-line panel. |
+| Cell line also has genomics data (CNA/mutation/mRNA) | 7,560 | 63 | Minor, same kind of coverage gap. |
+| Drug name present, not "SERUM" control | 7,488 | 72 | Expected data cleaning. |
+| `Time` value in the pipeline's hardcoded allow-list (`24hr,12hr,48hr,4hr,72hr` + blank) | **4,477** | **3,011 (40%)** | **This is the one worth a decision.** The dropped rows are not garbage — `value_counts()` on what's excluded shows large, clean groups at `5min` (234), `15min` (255), `30min` (321), `60min` (339), `120min` (244), `2hr` (133), `3hr` (119), `6hr` (63), `8hr` (139), and, notably, **`3d` (108), `6d` (96), `7d` (108)** — i.e. legitimate short-pulse acute-signaling timepoints *and* multi-day timepoints. |
+
+Two things follow from this. First, the CCLE-panel coverage gap (7,623 of 11,940) is a genuine data-availability constraint, not something fixable in code — closing it would require sourcing baseline proteomic profiles for ~230 additional cell lines/sublines from elsewhere, which may not exist publicly for the more specialized derivative lines. It should be described in the Methods/Limitations section as exactly that, rather than left as an unexplained gap. Second — and this is worth flagging directly rather than acting on unilaterally — **the Time allow-list is excluding the paper's own stated subject matter.** The paper's title is about *adaptive* proteomic responses; the 3-day/6-day/7-day timepoints are precisely the kind of longer-horizon measurements where an "adaptive" (as opposed to acute/immediate) response would show up, and they're currently being discarded by what looks like an arbitrary whitelist rather than a documented experimental-design decision. Whether to expand this filter is a real scientific judgment call — it changes the composition of the dataset and every downstream number — so I did not rerun the sweep with a different filter. It needs a decision (ideally checked against whatever timepoints the paper's own Methods text says it used, and/or Prof. Korkut's input) before being changed.
+
+### A separate, higher-priority finding: possible replicate leakage in the current cross-validation
+
+While tracing the sample counts, checked how much of the dataset consists of repeated measurements of the same experimental condition. Grouping rows by `(cell line, drug, time, dose)`: of 11,940 total rows, only 4,239 are *unique* conditions — **10,011 rows (84%) belong to a group of 2 or more rows sharing the same condition** (some groups as large as 33 replicate rows for a single cell-line/drug/time/dose combination).
+
+The current 5-fold CV (`model_shit()` in `model_stuff.py`) uses plain `KFold(shuffle=True)` at the *row* level. With 84% of rows belonging to a replicate group, this will routinely split replicate rows of the same condition across train and validation — meaning the model can partly see near-duplicate examples of a validation condition during training. This is a well-known and common leakage pattern in cell-line/drug-response datasets, and it typically inflates reported correlation and R² relative to what the model would achieve on genuinely unseen conditions. This has **not** been fixed or re-run — it would change every number in every table (not just attention's), it's exactly the kind of methodological detail a Bioinformatics/PLOS Comp Bio reviewer is likely to ask about directly, and re-running with grouped CV (e.g. `GroupKFold` on the condition key, or holding out entire cell lines/drugs to test true generalization) is a substantial enough change in what's being measured that it should be a deliberate decision, not something silently swapped in. Flagging this as the top open item for the next phase of work — see recommendations below.
+
+### Updated priority list (supersedes the v3 addendum's priority list)
+
+1. **Decide how to handle replicate leakage in cross-validation.** Highest-leverage item — likely affects the validity of every reported number, not just attention's. Recommend implementing grouped CV (by condition, and/or a held-out-cell-line split to test true generalization) and reporting both the current row-level numbers and the grouped numbers side by side, so reviewers can see the leakage was checked for rather than wondering about it.
+2. **Decide on the `Time` allow-list.** Either document a principled reason for excluding sub-2-hour and multi-day timepoints (e.g. matching the paper's own stated experimental design), or expand it and re-run — this directly affects whether the dataset actually captures "adaptive" (longer-timescale) responses, which is the paper's stated focus.
+3. ~~Attention-NN architecture discrepancy~~ — **resolved this session** (Bug 9, above).
+4. Get the real `fs_korkut.csv` / Prof. Korkut's confirmation of the 210 literature-researched functional-score values (carried over from v3).
+5. Get the student's original mean-imputation script if it exists (carried over from v3).
+6. Fix the Table 2 caption bug; document the train/test split's random seed; document RF/TSNN/Attention hyperparameters at the same level of detail as XGBoost's (carried over from v3).
 
 ## v3 addendum (2026-09-28/29) — fs_korkut.csv reconstructed, exact 289/528 protein counts, one new bug found and fixed
 
