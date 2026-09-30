@@ -12,24 +12,26 @@ def data_processing(data):
         if (item in drug2target.keys()) == 0:
             print(item)
 
-    ccle_data = pd.DataFrame(columns = ccle.columns)
-
-    order_ts = targetscores['CL-Name'].value_counts().to_dict()
-
-    count = 0
-
-    for cl_name in set(targetscores['CL-Name']):
-        
-        if cl_name in set(ccle['CL-Name']):
-
-            num = order_ts[cl_name]
-            temp_df = ccle.loc[ccle['CL-Name']==cl_name,:]  
-
-            if temp_df.shape[0] == 1:
-                duplicated_rows = pd.concat([temp_df] * (num), axis=0)
-                ccle_data = pd.concat([ccle_data, duplicated_rows], ignore_index=True)
-
-                count += num
+    # UPDATED 2026-09-30 (Bug 10): the original code built ccle_data by iterating
+    # `set(targetscores['CL-Name'])` -- an UNORDERED Python set -- and concatenating one
+    # duplicated block of ccle rows per unique cell line, in whatever order the set
+    # happened to iterate in. That block order has no relationship to targetscores'
+    # actual row order, so `baselines = ccle_data.iloc[:,1:].to_numpy()` (used below)
+    # ended up row-for-row MISALIGNED with every other feature array and with `labels`
+    # itself -- confirmed empirically: on a 2,000-row check, 1,374 rows (90%) had a
+    # different cell line's baseline protein levels attached than the row's own CL-Name.
+    # This fed wrong-cell-line baseline data into every 'nn' model (tsnn, attention) via
+    # `feature_dict['baseline']` this whole time. It also silently dropped any cell line
+    # with more than one matching ccle row (`if temp_df.shape[0]==1`) instead of just
+    # picking one, which for this dataset only affects 'TT' (2 duplicate ccle rows) but
+    # would otherwise further shrink/misalign ccle_data relative to targetscores.
+    # Fixed with a row-preserving left merge: every targetscores row gets exactly the
+    # ccle row for its own CL-Name, in targetscores' own order, with duplicate ccle
+    # entries for the same cell line collapsed to one (keep='first') instead of dropped.
+    ccle_dedup = ccle.drop_duplicates(subset='CL-Name', keep='first')
+    ccle_data = targetscores[['CL-Name']].merge(ccle_dedup, on='CL-Name', how='left')
+    assert ccle_data.shape[0] == targetscores.shape[0], "ccle_data must have exactly one row per targetscores row"
+    assert ccle_data['CL-Name'].isna().sum() == 0, "every targetscores CL-Name should match a ccle row (data_loader.py pre-filters on this)"
 
     drug_vecs = np.array([drug2target[drug] for drug in targetscores['Drug-Name']])
 

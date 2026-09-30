@@ -1,12 +1,37 @@
 from sklearn.model_selection import train_test_split
 import numpy as np
-from sklearn.model_selection import KFold
+from sklearn.model_selection import KFold, GroupKFold
 from sklearn.decomposition import PCA
 import xgboost as xgb
 from sklearn.ensemble import RandomForestRegressor
 from tensorflow.keras.optimizers import Adam
 from models import CustomTSModel, CustomAttentionModel, WeightedAverageEnsemble
 
+
+class MeanBaselineRegressor:
+    # UPDATED 2026-09-30: trivial baseline -- ignores all features, predicts each
+    # protein's training-fold mean for every row. Added so the real models' reported
+    # r/R2 can be read against a naive floor rather than assumed to reflect skill.
+    def fit(self, X, y):
+        self.means_ = np.nanmean(y, axis=0)
+        return self
+
+    def predict(self, X):
+        n = X.shape[0] if hasattr(X, 'shape') else len(X)
+        return np.tile(self.means_, (n, 1))
+
+
+# UPDATED 2026-09-30 (replicate-leakage fix): 84% of rows in this dataset share a
+# (cell line, drug, time, dose) "condition" with at least one other row (some groups
+# have 30+ replicates). The original KFold(shuffle=True) split at the ROW level, so
+# replicate rows of the same condition routinely ended up in both train and
+# validation within a fold -- letting the model partly see near-duplicates of a
+# validation example during training, which inflates reported correlation/R2 relative
+# to genuinely unseen conditions. Fixed by switching to GroupKFold on a `groups` array
+# (the same condition key), so every row from a given condition falls entirely in one
+# fold. `groups=None` falls back to the old row-level KFold for any caller that
+# doesn't have a group key yet, but training.py now always supplies one.
+#
 # PATCHED (see TargetScore_replication_report.md): the original model_shit() had two
 # bugs that together meant genuine 5-fold CV never happened:
 #   1. A dead first "for train_idx, val_idx in kf.split(X_train): fold += 1" loop that
@@ -18,14 +43,19 @@ from models import CustomTSModel, CustomAttentionModel, WeightedAverageEnsemble
 # (model, pcas) pair per fold instead of a single model, so the caller can evaluate
 # each fold's model on the true held-out test set and report a genuine mean +/- std,
 # matching what the paper's Table 1/2 captions claim ("5-fold cross-validation").
-def model_shit(data, model_type, model_name, features, labels):
+def model_shit(data, model_type, model_name, features, labels, groups=None):
 
     y_train = labels
 
-    kf = KFold(n_splits=5, shuffle=True, random_state=42)
+    if groups is not None:
+        kf = GroupKFold(n_splits=5, shuffle=True, random_state=42)
+        split_iter = kf.split(y_train, groups=groups)
+    else:
+        kf = KFold(n_splits=5, shuffle=True, random_state=42)
+        split_iter = kf.split(y_train)
     fold_results = []
 
-    for fold, (train_idx, val_idx) in enumerate(kf.split(y_train), start=1):
+    for fold, (train_idx, val_idx) in enumerate(split_iter, start=1):
 
         train_features = []
         val_features = []
@@ -55,7 +85,18 @@ def model_shit(data, model_type, model_name, features, labels):
 
         X_tr, X_val, y_tr, y_val = train_features, val_features, y_train[train_idx], y_train[val_idx]
 
-        if model_name == 'xgb':
+        # UPDATED 2026-09-30: baseline_only_xgb ignores everything built above and
+        # trains the same XGBoost config used for 'xgb' on ONLY the baseline (CCLE
+        # protein-level) features -- a second trivial-ish baseline showing how much
+        # of xgb's real performance comes from baseline protein levels alone vs. the
+        # drug/dose/time/genomics features the full model also sees.
+        if model_name == 'baseline_only_xgb':
+            X_tr = features['baseline'][train_idx]
+            X_val = features['baseline'][val_idx]
+
+        if model_name == 'mean_baseline':
+            model_cv = MeanBaselineRegressor()
+        elif model_name == 'xgb' or model_name == 'baseline_only_xgb':
             model_cv = xgb.XGBRegressor(
                 objective='reg:squarederror',
                 max_depth=3,

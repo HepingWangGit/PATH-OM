@@ -45,7 +45,9 @@ logs/
 # Local scratch (this session's cache of large regeneratable intermediates)
 run/cache/
 run/cache_fskorkut/
+run/cache_v5/
 run/__pycache__/
 run/*.log
 run/sweep_fskorkut_log.txt
+run/sweep_v5_log.txt
 run/rerun_attention_log.txt

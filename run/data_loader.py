@@ -121,13 +121,28 @@ def load_data(protein_set='289'):
     targetscores = targetscores.loc[targetscores['Drug-Name'].isna() == 0]
     targetscores = targetscores.loc[targetscores['Drug-Name']!='SERUM', :]
 
-    targetscores = targetscores.loc[targetscores['Time'].isin(['24hr', '24hrs', '12hr', '12h', '12hrs', '48hrs', '48hr', '48h', '#', np.nan, '72hr', '4hr']), :]
+    # UPDATED 2026-09-30 (per user decision after the v4 report's sample-count-gap
+    # writeup): added '3d', '6d', '7d' to the allow-list. These are legitimate
+    # multi-day timepoints (confirmed present in time_dict with correct hour encodings:
+    # 72/144/168), and they are exactly the longer-horizon measurements where an
+    # "adaptive" (as opposed to acute) proteomic response -- the paper's own title --
+    # would show up. Sub-2-hour short-pulse timepoints (5min...120min) and other
+    # in-between hour marks (2hr,3hr,6hr,8hr) remain excluded per the same decision
+    # ("the time window can be cut" for those; see TargetScore_replication_report.md's
+    # v4/v5 addenda for the full row-count breakdown behind this call).
+    targetscores = targetscores.loc[targetscores['Time'].isin(
+        ['24hr', '24hrs', '12hr', '12h', '12hrs', '48hrs', '48hr', '48h', '#', np.nan,
+         '72hr', '4hr', '3d', '6d', '7d']), :]
 
     time_dict[targetscores.loc['set105_481', 'Time']] = 0
     dose_dict[targetscores.loc['set105_481', 'Time']] = 0
     dim_dict[targetscores.loc['set105_481', 'Time']] = 0
 
-    test_targetscores = targetscores.sample(frac=0.15)
+    # UPDATED 2026-09-30: added random_state so the 15% held-out test set (and every
+    # downstream number) is exactly reproducible run-to-run -- flagged as missing in
+    # every version of this report through v4; now fixed and documented here for
+    # the paper's Methods section.
+    test_targetscores = targetscores.sample(frac=0.15, random_state=42)
     targetscores = targetscores.drop(test_targetscores.index)
 
     bionetwork = pd.read_csv('./WK_bionetwork.csv', sep=',')

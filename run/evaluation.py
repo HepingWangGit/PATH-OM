@@ -10,24 +10,14 @@ def evaluate_model(trained_model, data_dict, test_targetscores, non_NA_mask, pca
     #test_targetscores = data_dict['test_targetscores']
     ccle = data_dict['ccle']
 
-    test_ccle_data = pd.DataFrame(columns = ccle.columns)
-
-    order_test_ts = test_targetscores['CL-Name'].value_counts().to_dict()
-
-    count = 0
-
-    for cl_name in set(test_targetscores['CL-Name']):
-        
-        if cl_name in set(ccle['CL-Name']):
-
-            num = order_test_ts[cl_name]
-            temp_df = ccle.loc[ccle['CL-Name']==cl_name,:]  
-
-            if temp_df.shape[0] == 1:
-                duplicated_rows = pd.concat([temp_df] * (num), axis=0)
-                test_ccle_data = pd.concat([test_ccle_data, duplicated_rows], ignore_index=True)
-
-                count += num
+    # UPDATED 2026-09-30 (Bug 10, same fix as data_preprocessing.py): building
+    # test_ccle_data by iterating an unordered `set(...)` of cell-line names and
+    # concatenating duplicated blocks scrambled its row order relative to
+    # test_targetscores -- confirmed on the training-side equivalent that ~90% of rows
+    # ended up with the wrong cell line's baseline data. Fixed with a row-preserving
+    # left merge instead.
+    ccle_dedup = ccle.drop_duplicates(subset='CL-Name', keep='first')
+    test_ccle_data = test_targetscores[['CL-Name']].merge(ccle_dedup, on='CL-Name', how='left')
 
     test_baselines = test_ccle_data.iloc[:,1:].to_numpy().astype(np.float32)
     test_labels = test_targetscores.iloc[:,8:].to_numpy()
@@ -91,7 +81,7 @@ def evaluate_model(trained_model, data_dict, test_targetscores, non_NA_mask, pca
         print("#Organic Data Points (Test):", np.sum(non_NA_mask_test))
     return(test_targetscores.shape[0], np.corrcoef(test_data_pred[non_NA_mask_test].flatten(), test_labels[non_NA_mask_test].flatten())[0, 1])
 
-def evaluate_model_metrics(trained_model, data_dict, test_targetscores, pca_list, model_type):
+def evaluate_model_metrics(trained_model, data_dict, test_targetscores, pca_list, model_type, model_name=None):
     # ADDED: same feature construction as evaluate_model(), but returns Correlation,
     # R^2, and interval-placement accuracy together (evaluate_model() only ever
     # returned correlation; the other two metrics were computed but only printed when
@@ -100,16 +90,11 @@ def evaluate_model_metrics(trained_model, data_dict, test_targetscores, pca_list
     genomics_data, drug2target, dose_dict, dim_dict, time_dict, stimuli_dict = data_dict['dicts']
     ccle = data_dict['ccle']
 
-    test_ccle_data = pd.DataFrame(columns=ccle.columns)
-    order_test_ts = test_targetscores['CL-Name'].value_counts().to_dict()
-
-    for cl_name in set(test_targetscores['CL-Name']):
-        if cl_name in set(ccle['CL-Name']):
-            num = order_test_ts[cl_name]
-            temp_df = ccle.loc[ccle['CL-Name'] == cl_name, :]
-            if temp_df.shape[0] == 1:
-                duplicated_rows = pd.concat([temp_df] * num, axis=0)
-                test_ccle_data = pd.concat([test_ccle_data, duplicated_rows], ignore_index=True)
+    # UPDATED 2026-09-30 (Bug 10, same fix as data_preprocessing.py / evaluate_model()
+    # above): row-preserving left merge instead of the old unordered-set block-concat,
+    # which misaligned ~90% of rows to the wrong cell line's baseline data.
+    ccle_dedup = ccle.drop_duplicates(subset='CL-Name', keep='first')
+    test_ccle_data = test_targetscores[['CL-Name']].merge(ccle_dedup, on='CL-Name', how='left')
 
     test_baselines = test_ccle_data.iloc[:, 1:].to_numpy().astype(np.float32)
     test_labels = test_targetscores.iloc[:, 8:].to_numpy()
@@ -145,6 +130,12 @@ def evaluate_model_metrics(trained_model, data_dict, test_targetscores, pca_list
         test_data_list.append(test_baselines)
     if model_type == 'c-ml':
         test_data_list = np.concatenate(test_data_list, axis=1)
+
+    # UPDATED 2026-09-30: baseline_only_xgb was trained on ONLY the baseline (CCLE
+    # protein-level) features (see model_stuff.py), so it must be evaluated on the
+    # same feature set, not the full concatenated one built above.
+    if model_name == 'baseline_only_xgb':
+        test_data_list = test_baselines
 
     test_data_pred = trained_model.predict(test_data_list)
     non_NA_mask_test = (np.isnan(test_labels) == 0)

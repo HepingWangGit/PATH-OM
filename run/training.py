@@ -102,13 +102,25 @@ def training_machine(targetscores, dict_list, features, model_type, model_name):
     for item1, item2 in zip(feature_name_list, feature_list):
         feature_dict[item1] = item2
 
-    if model_type == 'nn':
-        feature_dict['baseline'] = baselines
+    # UPDATED 2026-09-30: always include baseline features in feature_dict (not just
+    # for model_type=='nn') so baseline_only_xgb (a c-ml model) can access them too.
+    # Harmless for every other c-ml model: model_stuff.py's concatenation loop already
+    # excludes the 'baseline' key (`if key != 'baseline'`), so this doesn't change
+    # xgb/rf/ensemble/mean_baseline's feature set at all.
+    feature_dict['baseline'] = baselines
+
+    # UPDATED 2026-09-30 (replicate-leakage fix): build the same (cell line, drug,
+    # time, dose) condition key used to diagnose the leakage risk in the v4 report,
+    # and pass it to model_shit() as the CV group key so GroupKFold keeps every row
+    # of a given condition in a single fold instead of splitting replicates across
+    # train/validation.
+    groups = (targetscores['CL-Name'].astype(str) + '|' + targetscores['Drug-Name'].astype(str) + '|' +
+              targetscores['Time'].astype(str) + '|' + targetscores['Dose'].astype(str)).to_numpy()
 
     # PATCHED: model_shit() now returns a list of per-fold results (one dict per real
     # CV fold) instead of a single (model, pcas) pair, since the original 5-fold CV was
     # broken (see model_stuff.py). Callers that want the old single-model behavior
     # should use fold_results[-1]['model'], fold_results[-1]['pcas'].
-    fold_results = model_shit(data=dict_list, model_type=model_type, model_name=model_name, features=feature_dict, labels=labels)
+    fold_results = model_shit(data=dict_list, model_type=model_type, model_name=model_name, features=feature_dict, labels=labels, groups=groups)
 
     return fold_results, used_protein_columns

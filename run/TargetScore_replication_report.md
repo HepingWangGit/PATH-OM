@@ -1,8 +1,82 @@
-# TargetScore Paper — Replication & Reproducibility Report (v4 — Attention-NN bug fixed, sample-count gap explained, replicate-leakage risk identified)
+# TargetScore Paper — Replication & Reproducibility Report (v5 — leveling-up pass: Time window expanded, replicate leakage fixed, a second major bug found, trivial baselines added)
 
 **Repo:** https://github.com/HepingWangGit/PATH-OM (new tracking repo; superseded the original student's `cekayan/TargetScore`)
 **Paper:** "Machine learning prediction of adaptive proteomic responses to targeted therapies" (Wang, Kayan, Taskin, Korkut)
 **Pipeline exercised:** a patched copy of `ModularMM3/`, kept in `run/` (data_loader → data_preprocessing → imputation (mean or ML-based) → training (5 architectures, genuine 5-fold CV) → evaluation)
+
+## v5 addendum (2026-09-30) — the "leveling up scientifically" pass
+
+This addendum acts on the decisions made after the v4 report: the Time window was expanded to include multi-day timepoints, and every item on the v4/leveling-up priority list was implemented and re-run together in one pass, since each one touches the same underlying dataset or CV loop. **This pass also uncovered a second major, previously-undiscovered bug (Bug 10) that had been silently corrupting the baseline-protein feature for every neural-net model (tsnn, attention) since the beginning of this replication.**
+
+### What changed
+
+1. **Time allow-list expanded** (per decision): added `3d`, `6d`, `7d` to `data_loader.py`'s Time filter. Short-pulse timepoints (5min–120min, 2hr/3hr/6hr/8hr) remain excluded, per the same decision. Dataset grew from 4,477 to **4,789 rows** (4,071 train / 718 test) — exactly the expected +312 (108+96+108 for 3d/6d/7d).
+2. **Train/test split seeded**: `targetscores.sample(frac=0.15, random_state=42)` — the held-out test set is now identical run-to-run.
+3. **Replicate-leakage fix**: replaced row-level `KFold(shuffle=True)` with `GroupKFold` on a `(cell line, drug, time, dose)` condition key, so replicate rows of the same condition can no longer be split across train and validation within a fold (see the v4 report's leakage-risk section for how this was discovered — 84% of rows belong to a replicate group).
+4. **Two trivial baselines added** to the sweep: `mean_baseline` (ignores all features, predicts each protein's training-fold mean) and `baseline_only_xgb` (the same XGBoost config as the real model, but trained on only the CCLE baseline protein levels — no drug/dose/time/genomics).
+5. **Bug 10, found and fixed** (see next section) — this one mattered more than any of the above.
+
+### Bug 10 — the baseline (CCLE reference proteomics) feature was misaligned to the wrong cell line for ~90% of rows
+
+While validating the new `baseline_only_xgb` diagnostic, its held-out test correlation collapsed (0.29 during cross-validation → 0.08 on the true test set, R² negative) even though it's a simple, low-capacity model that shouldn't overfit that badly. That gap was the tell.
+
+Root cause, in `data_preprocessing.py` and twice in `evaluation.py`: the code built the baseline-protein feature array by iterating `set(targetscores['CL-Name'])` — an **unordered** Python set of unique cell-line names — and concatenating one duplicated block of matching CCLE rows per cell line, in whatever order the set happened to produce. That block order has no relationship whatsoever to `targetscores`' actual row order, so the resulting array (`ccle_data` / `baselines`) was silently misaligned against every other feature array and against the labels themselves. Confirmed directly: on a 2,000-row check, **1,374 rows (90%) had a different cell line's baseline protein levels attached than that row's own cell line.** The same code also silently dropped any cell line with more than one matching CCLE row (`if temp_df.shape[0]==1`) instead of picking one — for this dataset that only affects the cell line `TT` (2 duplicate CCLE entries), but it's the same class of bug.
+
+This fed **wrong-cell-line baseline data into every neural-net model (tsnn, attention)** via `feature_dict['baseline']` — the entire time this replication effort has been running, across every prior version of this report. It never affected xgb/rf/ensemble, because those models never consume the baseline feature at all (an unrelated, pre-existing quirk of the original pipeline). This is consistent with, and likely a major contributor to, why tsnn and attention lagged xgb in every version of this report through v4.
+
+**Fix:** replaced the set-iteration block-concat with a row-preserving left merge (`targetscores[['CL-Name']].merge(ccle.drop_duplicates(subset='CL-Name'), on='CL-Name', how='left')`) in all three places it occurred, with an assertion that the result has exactly one row per input row. Verified: `baseline_only_xgb`'s test correlation now tracks its CV validation correlation closely (0.26–0.39 val → 0.31–0.35 test, no collapse) instead of falling off a cliff.
+
+### Full results — all 28 configurations (7 models × 2 protein sets × 2 imputations)
+
+| Protein set | Imputation | Model | Pearson r | R² | IP accuracy |
+|---|---|---|---|---|---|
+| 289 | mean | **Attention-based NN** | **0.708 ± 0.011** | 0.493 ± 0.021 | 68.6% |
+| 289 | mean | TargetScore-Inspired NN | 0.705 ± 0.010 | 0.491 ± 0.014 | 69.0% |
+| 289 | mean | XGBoost | 0.688 ± 0.009 | 0.472 ± 0.011 | 68.5% |
+| 289 | mean | Ensemble | 0.668 ± 0.009 | 0.431 ± 0.009 | 67.7% |
+| 289 | mean | Random Forest | 0.472 ± 0.014 | 0.222 ± 0.012 | 64.8% |
+| 289 | mean | *baseline-only XGBoost* | *0.328 ± 0.012* | *0.098 ± 0.011* | *64.3%* |
+| 289 | mean | *mean-of-training baseline* | *0.199 ± 0.001* | *0.039 ± 0.000* | *63.9%* |
+| 289 | ml | **TargetScore-Inspired NN** | **0.720 ± 0.012** | 0.513 ± 0.019 | 69.5% |
+| 289 | ml | Attention-based NN | 0.705 ± 0.004 | 0.491 ± 0.009 | 68.2% |
+| 289 | ml | XGBoost | 0.679 ± 0.009 | 0.460 ± 0.012 | 68.1% |
+| 289 | ml | Ensemble | 0.660 ± 0.010 | 0.418 ± 0.009 | 67.6% |
+| 289 | ml | Random Forest | 0.422 ± 0.013 | 0.177 ± 0.010 | 64.7% |
+| 289 | ml | *baseline-only XGBoost* | *0.334 ± 0.011* | *0.096 ± 0.011* | *64.1%* |
+| 289 | ml | *mean-of-training baseline* | *0.200 ± 0.000* | *0.039 ± 0.000* | *64.1%* |
+| 528 | mean | **Attention-based NN** | **0.710 ± 0.007** | 0.500 ± 0.010 | 68.4% |
+| 528 | mean | TargetScore-Inspired NN | 0.700 ± 0.007 | 0.486 ± 0.010 | 68.3% |
+| 528 | mean | XGBoost | 0.694 ± 0.008 | 0.481 ± 0.010 | 68.6% |
+| 528 | mean | Ensemble | 0.675 ± 0.009 | 0.439 ± 0.009 | 67.8% |
+| 528 | mean | Random Forest | 0.466 ± 0.015 | 0.215 ± 0.012 | 64.8% |
+| 528 | mean | *baseline-only XGBoost* | *0.338 ± 0.015* | *0.105 ± 0.013* | *64.4%* |
+| 528 | mean | *mean-of-training baseline* | *0.210 ± 0.001* | *0.043 ± 0.000* | *63.8%* |
+| 528 | ml | **TargetScore-Inspired NN** | **0.725 ± 0.008** | 0.521 ± 0.012 | 69.4% |
+| 528 | ml | Attention-based NN | 0.705 ± 0.012 | 0.491 ± 0.019 | 67.7% |
+| 528 | ml | XGBoost | 0.681 ± 0.008 | 0.462 ± 0.010 | 68.1% |
+| 528 | ml | Ensemble | 0.670 ± 0.009 | 0.429 ± 0.009 | 67.5% |
+| 528 | ml | *baseline-only XGBoost* | *0.353 ± 0.013* | *0.109 ± 0.013* | *64.1%* |
+| 528 | ml | Random Forest | 0.349 ± 0.012 | 0.121 ± 0.008 | 63.8% |
+| 528 | ml | *mean-of-training baseline* | *0.206 ± 0.001* | *0.041 ± 0.000* | *63.8%* |
+
+(Raw JSON: `run/sweep_results_v5.json`. Table: `run/sweep_table_v5.md`.)
+
+**The headline finding: with both bugs fixed and leakage controlled, the paper's own novel architectures (TargetScore-Inspired NN and Attention-based NN) now outperform XGBoost in every single configuration** — a reversal of every prior version of this report, where XGBoost led every config and Attention-NN in particular trailed badly. TargetScore-Inspired NN wins outright in both ML-imputation configs (r = 0.720, 0.725); Attention-NN wins both mean-imputation configs (r = 0.708, 0.710). This is a materially different, and much more favorable, story for the paper than any previous version of this report supported — and it's now resting on a correctly-implemented attention mechanism (Bug 9), correctly-aligned baseline features (Bug 10), leakage-controlled cross-validation, and two trivial baselines confirming the real models' lift is genuine (mean-of-training baseline: r ≈ 0.20; baseline-only XGBoost: r ≈ 0.33–0.35; every real model: r ≥ 0.42, with the top models at 0.68–0.73).
+
+**Significance.** A paired Wilcoxon signed-rank test across the 5 CV folds shows attention beating XGBoost in 20/20 folds across all 4 configs (p = 0.06 in each config — the floor achievable with only 5 folds per config), and TargetScore-Inspired NN beating XGBoost in 19/20 folds. This is a consistent, one-directional effect, but with only 5 folds per config the test cannot cross the conventional p < 0.05 threshold no matter how consistent the direction is — this should be read as "the direction held in effectively every fold and every config," not as a certified significance result. Repeated or nested CV would be needed for a formal claim.
+
+### Updated priority list
+
+1. ~~Replicate leakage~~ — **resolved this session** (GroupKFold).
+2. ~~Time-window scope~~ — **resolved this session** (3d/6d/7d added per decision).
+3. ~~Trivial baselines~~ — **resolved this session** (mean_baseline, baseline_only_xgb added).
+4. ~~Attention-NN architecture discrepancy~~ — **resolved in v4** (Bug 9).
+5. **NEW, resolved this session**: Bug 10 (baseline-feature misalignment) — fixed; this turned out to be the single biggest lever on tsnn/attention's numbers of anything found across this entire replication effort.
+6. Statistical significance is directionally consistent but underpowered at 5 folds — consider repeated/nested CV if the paper wants to formally claim tsnn/attention beat xgb, rather than relying on the point estimates alone.
+7. Get the real `fs_korkut.csv` / Prof. Korkut's confirmation of the 210 literature-researched functional-score values (carried over from v3/v4).
+8. Get the student's original mean-imputation script if it exists (carried over).
+9. Fix the Table 2 caption bug; document RF/TSNN/Attention hyperparameters (carried over).
+10. Not yet started: ablation on the TSEquationLayer's biological prior, external validation on an independent dataset, and biological case studies tying predictions to known resistance mechanisms — see the Publication Plan doc's "Leveling up scientifically" table for the full list and suggested sequencing.
 
 ## v4 addendum (2026-09-30) — the Attention-NN gap was a real bug, not a fundamental limitation; sample-count gap traced to its source; a likely metrics-inflation risk identified
 

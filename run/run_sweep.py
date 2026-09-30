@@ -3,13 +3,13 @@ matplotlib.use('Agg')
 import numpy as np
 import time, json, os, pickle, sys, traceback
 
-# UPDATED 2026-09-28: fresh cache dir + results path for the fs_korkut.csv-based rerun,
-# so this never silently reuses pickles built from the old fs_mod.csv substitution
-# (protein_set labels also changed from '258'/'318' to '289'/'528' to match, since the
-# reconstructed fs_korkut.csv now yields the paper's exact protein counts).
-CACHE_DIR = '/home/claude/TargetScore/run/cache_fskorkut'
+# UPDATED 2026-09-30: fresh cache dir + results path again (v5) -- the Time allow-list
+# now includes 3d/6d/7d (per user decision) and the train/test split is now seeded,
+# both of which change data_loader.py's output, so every downstream pickle (data_dict,
+# features, imputed targetscores) must be rebuilt rather than reused from cache_fskorkut.
+CACHE_DIR = '/home/claude/TargetScore/run/cache_v5'
 os.makedirs(CACHE_DIR, exist_ok=True)
-RESULTS_PATH = '/home/claude/TargetScore/run/sweep_results_fskorkut.json'
+RESULTS_PATH = '/home/claude/TargetScore/run/sweep_results_v5.json'
 
 def cpath(name):
     return os.path.join(CACHE_DIR, name)
@@ -45,7 +45,11 @@ from evaluation import evaluate_model_metrics
 
 PROTEIN_SETS = ['289', '528']
 IMPUTATIONS = ['mean', 'ml']
-MODELS = [('c-ml', 'xgb'), ('c-ml', 'rf'), ('c-ml', 'ensemble'), ('nn', 'tsnn'), ('nn', 'attention')]
+# UPDATED 2026-09-30: added two trivial baselines (mean_baseline, baseline_only_xgb)
+# per the "leveling up scientifically" plan, so the real models' r/R2 can be read
+# against a naive floor rather than assumed to reflect skill. Both run as 'c-ml'.
+MODELS = [('c-ml', 'mean_baseline'), ('c-ml', 'baseline_only_xgb'),
+          ('c-ml', 'xgb'), ('c-ml', 'rf'), ('c-ml', 'ensemble'), ('nn', 'tsnn'), ('nn', 'attention')]
 
 t_start = time.time()
 results = load_results()
@@ -110,7 +114,7 @@ for protein_set in PROTEIN_SETS:
                 fold_metrics = []
                 for fr in fold_results:
                     m = evaluate_model_metrics(fr['model'], data_dict, test_targetscores_aligned,
-                                                pca_list=fr['pcas'], model_type=model_type)
+                                                pca_list=fr['pcas'], model_type=model_type, model_name=model_name)
                     m['fold'] = fr['fold']
                     m['train_corr'] = fr['train_corr']
                     m['val_corr'] = fr['val_corr']
